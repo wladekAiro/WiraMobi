@@ -46,7 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_EXPENSES, null);
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_EXPENSES + " ORDER BY ID DESC", null);
 
         if (res.getCount() > 0){
             while (res.moveToNext()) {
@@ -71,8 +71,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ExpenseItem save(ExpenseItem expenseItem){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        if(expenseItem.getId() == null){
-            //Insert
+        String pic_url = expenseItem.getImagePath();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_EXPENSES + " WHERE EXPENSE_PHOTO_URL =?",
+                new String[]{pic_url});
+
+        if(cursor.getCount() == 0){
+            //Create new record
             ContentValues contentValues = new ContentValues();
             contentValues.put("EXPENSE_NAME", expenseItem.getExpenseName());
             contentValues.put("EXPENSE_DATE", expenseItem.getExpenseDate());
@@ -87,14 +92,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             }
         }else {
-            //Update
+            //Update record
             ContentValues contentValues = new ContentValues();
             contentValues.put("EXPENSE_NAME", expenseItem.getExpenseName());
             contentValues.put("EXPENSE_DATE", expenseItem.getExpenseDate());
             contentValues.put("EXPENSE_PHOTO_URL", expenseItem.getImagePath());
             contentValues.put("EXPENSE_AMOUNT", expenseItem.getExpenseAmount());
 
-            db.update(TABLE_EXPENSES, contentValues, "ID='" + expenseItem.getId() , null);
+            db.update(TABLE_EXPENSES, contentValues, "EXPENSE_PHOTO_URL='" + pic_url + "'", null);
 
         }
 
@@ -153,4 +158,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    public ArrayList<ExpenseClaim> getClaims(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ArrayList<ExpenseClaim> claims = new ArrayList<>();
+
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_EXPENSE_CLAIMS + " ORDER BY ID DESC", null);
+
+        if (res.getCount() > 0){
+            while (res.moveToNext()) {
+
+                ExpenseClaim expenseClaim = new ExpenseClaim();
+                expenseClaim.setId(new Long(res.getInt(0)));
+                expenseClaim.setTitle(res.getString(1));
+                expenseClaim.setDescription(res.getString(2));
+                expenseClaim.setTotalAmount(res.getDouble(3));
+
+                claims.add(expenseClaim);
+            }
+        }
+
+        db.close();
+
+        return claims;
+    }
 }

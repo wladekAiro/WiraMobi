@@ -2,7 +2,6 @@ package com.example.wladek.wira.activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -13,15 +12,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.wladek.wira.R;
 import com.example.wladek.wira.pojo.ExpenseItem;
-import com.kosalgeek.android.photoutil.ImageLoader;
+import com.example.wladek.wira.utils.DatabaseHelper;
+import com.squareup.picasso.Picasso;
 
-import java.io.FileNotFoundException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.File;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -33,14 +31,18 @@ public class ExpenseActivity extends AppCompatActivity {
 
     static final int DIALOG_ID = 0;
 
-    EditText expenseName;
-    EditText expenseAmount;
+    EditText editTextExpenseName;
+    EditText editTextExpenseAmount;
     ExpenseItem expenseExpenseItem;
     ImageView imgExpensePic;
     Button btnSubmitExpense;
-    EditText datePicker;;
+    EditText editTextDatePicker;;
 
     ActionBar actionBar;
+
+    Picasso mPicasso;
+
+    DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +55,18 @@ public class ExpenseActivity extends AppCompatActivity {
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        expenseName = (EditText) findViewById(R.id.editTextDescription);
-        expenseAmount = (EditText) findViewById(R.id.editTextAmount);
+        editTextExpenseName = (EditText) findViewById(R.id.editTextDescription);
+        editTextExpenseAmount = (EditText) findViewById(R.id.editTextAmount);
         imgExpensePic = (ImageView) findViewById(R.id.imgExpensePic);
         btnSubmitExpense = (Button) findViewById(R.id.btnSubmitExpense);
-        datePicker = (EditText) findViewById(R.id.editTextDate);
+        editTextDatePicker = (EditText) findViewById(R.id.editTextDate);
 
 
         expenseExpenseItem = (ExpenseItem) getIntent().getSerializableExtra("expenseItem");
+
+        mPicasso = Picasso.with(this);
+
+        dbHelper = new DatabaseHelper(this);
 
         setValues();
 
@@ -73,10 +79,14 @@ public class ExpenseActivity extends AppCompatActivity {
                 pDialog.setTitleText("Submitting ...");
                 pDialog.setCancelable(false);
                 pDialog.show();
+
+                updateExpenseItem();
+
+                pDialog.dismiss();
             }
         });
 
-        datePicker.setOnClickListener(new View.OnClickListener() {
+        editTextDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(DIALOG_ID);
@@ -92,6 +102,17 @@ public class ExpenseActivity extends AppCompatActivity {
 //        });
     }
 
+    private void updateExpenseItem() {
+        expenseExpenseItem.setExpenseName(editTextExpenseName.getText().toString());
+        expenseExpenseItem.setExpenseAmount(new Double(editTextExpenseAmount.getText().toString()));
+        expenseExpenseItem.setExpenseDate(editTextDatePicker.getText().toString());
+
+        dbHelper.save(expenseExpenseItem);
+
+        Toast.makeText(this, "Updated Date : " +editTextDatePicker.getText().toString(),
+                Toast.LENGTH_LONG).show();
+    }
+
     @Override
     protected Dialog onCreateDialog(int id) {
 
@@ -105,37 +126,24 @@ public class ExpenseActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            datePicker.setText(dayOfMonth+"/"+""+monthOfYear+"/"+year);
+            editTextDatePicker.setText(dayOfMonth + "/" + "" + monthOfYear + "/" + year);
         }
     };
 
     public void setValues() {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/mm/yyyy");
-
-        Date date = null;
-
-        try {
-
-            date = simpleDateFormat.parse(expenseExpenseItem.getExpenseDate());
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
         if (expenseExpenseItem != null) {
 
-            expenseName.setText(expenseExpenseItem.getExpenseName());
-            expenseAmount.setText(expenseExpenseItem.getExpenseAmount() + "");
-            datePicker.setText(expenseExpenseItem.getExpenseDate());
+            editTextExpenseName.setText(expenseExpenseItem.getExpenseName());
+            editTextExpenseAmount.setText(expenseExpenseItem.getExpenseAmount() + "");
+            editTextDatePicker.setText(expenseExpenseItem.getExpenseDate());
 
-            try {
-                Bitmap bitmap = ImageLoader.init().from(expenseExpenseItem.getImagePath()).requestSize(250, 250).getBitmap();
-                imgExpensePic.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
+            mPicasso
+                    .load(new File(expenseExpenseItem.getImagePath()))
+                    .placeholder(R.drawable.ic_launcher)
+                    .error(R.drawable.error_circle)
+                    .resize(250, 250)
+                    .into(imgExpensePic);
         }
     }
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.wladek.wira.activity.ClaimsActivity;
 import com.example.wladek.wira.fragments.tab_fragments.ClaimsFragment;
 import com.example.wladek.wira.fragments.tab_fragments.ExpenseFragment;
 import com.example.wladek.wira.fragments.tab_fragments.ProfileFragment;
@@ -27,9 +29,7 @@ import com.kosalgeek.android.photoutil.CameraPhoto;
 import com.kosalgeek.android.photoutil.GalleryPhoto;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
     DatabaseHelper myDb;
 
+    ActionBar actionBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Wira");
+
+        actionBar = getSupportActionBar();
+
         viewPager = (ViewPager) findViewById(R.id.view_pager);
 
         setUpViewPager(viewPager);
@@ -76,29 +81,112 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
 
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-        });
-
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showGalleryOptions();
+            }
+        });
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                super.onTabSelected(tab);
+                viewPager.setCurrentItem(tab.getPosition());
+
+                if (tab.getPosition() == 0){
+
+                    fab.setVisibility(View.VISIBLE);
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showGalleryOptions();
+                        }
+                    });
+
+                }else if(tab.getPosition() == 1){
+                    fab.setVisibility(View.VISIBLE);
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getApplicationContext(), ClaimsActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                }else {
+                    fab.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                super.onTabUnselected(tab);
+                viewPager.setCurrentItem(tab.getPosition());
+
+                if (tab.getPosition() == 0){
+
+                    fab.setVisibility(View.VISIBLE);
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showGalleryOptions();
+                        }
+                    });
+
+                }else if(tab.getPosition() == 1){
+                    fab.setVisibility(View.VISIBLE);
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+//                            Toast.makeText(getApplicationContext(), "Raise claim" , Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getApplicationContext(), ClaimsActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                }else {
+                    fab.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                super.onTabReselected(tab);
+                viewPager.setCurrentItem(tab.getPosition());
+
+                if (tab.getPosition() == 0){
+
+                    fab.setVisibility(View.VISIBLE);
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showGalleryOptions();
+                        }
+                    });
+
+                }else if(tab.getPosition() == 1){
+                    fab.setVisibility(View.VISIBLE);
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+//                            Toast.makeText(getApplicationContext(), "Raise claim" , Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getApplicationContext(), ClaimsActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                }else {
+                    fab.setVisibility(View.INVISIBLE);
+                }
             }
         });
 
@@ -225,17 +313,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateExpense(String imageSrc) {
 
-        SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-
         ExpenseItem expenseItem = new ExpenseItem();
         expenseItem.setImagePath(imageSrc);
-        expenseItem.setExpenseDate(format.format(new Date()));
         expenseItem.setExpenseAmount(new Double(0));
 
         expenseItem = myDb.save(expenseItem);
 
         if (expenseFragment != null) {
-            expenseFragment.getExpenseExpenseItems().add(expenseItem);
+            expenseFragment.loadExpenses();
             expenseFragment.updateFragment1ListView();
         }
 

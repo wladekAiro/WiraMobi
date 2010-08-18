@@ -69,6 +69,7 @@ public class ExpenseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadExpenses();
     }
 
     @Nullable
@@ -77,8 +78,6 @@ public class ExpenseFragment extends Fragment {
         myView = inflater.inflate(R.layout.expense_layout, container, false);
 
 //        myDb = new DatabaseHelper(getActivity());
-
-        loadExpenses();
 
         listView = (ListView) myView.findViewById(R.id.lstExpenses);
 
@@ -90,7 +89,7 @@ public class ExpenseFragment extends Fragment {
         return myView;
     }
 
-    public class CustomListAdaptor extends BaseAdapter {
+    private class CustomListAdaptor extends BaseAdapter {
 
         private LayoutInflater layoutInflater;
         private ArrayList<ExpenseItem> itemsList = new ArrayList<ExpenseItem>();
@@ -153,12 +152,6 @@ public class ExpenseFragment extends Fragment {
                         .error(R.drawable.error_circle)
                         .resize(250, 200)
                         .into(viewHolder.imgItemView);
-//                try {
-//                    Bitmap bitmap = ImageLoader.init().from(lstExpenseItem.getImagePath()).requestSize(250, 250).getBitmap();
-//                    viewHolder.imgItemView.setImageBitmap(bitmap);
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
             }
 
             viewHolder.imgItemView.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +245,6 @@ public class ExpenseFragment extends Fragment {
     public void loadExpenses(){
         expenseExpenseItems.clear();
         LoadExpensesTask task = (LoadExpensesTask) new LoadExpensesTask().execute();
-//        expenseExpenseItems.addAll(myDb.getExpenseItems());
     }
 
     public class LoadExpensesTask extends AsyncTask<DatabaseHelper , Void , Void>{

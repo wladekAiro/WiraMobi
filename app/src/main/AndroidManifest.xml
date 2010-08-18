@@ -9,6 +9,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-sdk tools:overrideLibrary="com.getbase.floatingactionbutton"/>
 
     <application
         android:allowBackup="true"
@@ -30,6 +31,9 @@
         <activity
             android:name=".activity.ExpenseActivity"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ClaimsActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
