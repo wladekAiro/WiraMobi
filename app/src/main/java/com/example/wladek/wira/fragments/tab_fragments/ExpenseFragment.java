@@ -78,7 +78,7 @@ public class ExpenseFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 0;
+            return itemsList.size();
         }
 
         @Override
@@ -104,6 +104,9 @@ public class ExpenseFragment extends Fragment {
                 viewHolder.txtClaimAmount = (TextView) convertView.findViewById(R.id.txtClaimAmount);
                 viewHolder.txtClaimCenter = (TextView) convertView.findViewById(R.id.txtClaimCenter);
                 viewHolder.txtClaimDate = (TextView) convertView.findViewById(R.id.txtClaimDate);
+
+                convertView.setTag(viewHolder);
+
             }else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
