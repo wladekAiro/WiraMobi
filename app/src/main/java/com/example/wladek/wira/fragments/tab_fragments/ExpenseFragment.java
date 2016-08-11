@@ -2,6 +2,7 @@ package com.example.wladek.wira.fragments.tab_fragments;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,7 +20,9 @@ import android.widget.Toast;
 
 import com.example.wladek.wira.R;
 import com.example.wladek.wira.pojo.Item;
+import com.kosalgeek.android.photoutil.CameraPhoto;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -201,22 +204,41 @@ public class ExpenseFragment extends Fragment {
     private class CustomClickListener implements View.OnClickListener {
         String btnName;
         Context context;
+        CameraPhoto cameraPhoto;
+        final int CAMERA_REQUEST = 123;
         public CustomClickListener(Context context, String imgBtnCam) {
             this.btnName = imgBtnCam;
             this.context = context;
+            cameraPhoto = new CameraPhoto(context);
         }
 
         @Override
         public void onClick(View v) {
             if (btnName.equals("imgBtnCam")){
+                try {
+
+                    startActivityForResult(cameraPhoto.takePhotoIntent() , CAMERA_REQUEST);
+
+                } catch (IOException e) {
+                    Toast.makeText(context , "Something went wrong while taking a photo" ,
+                            Toast.LENGTH_LONG).show();
+                }
 
                 Toast.makeText(context , "Get Camera" , Toast.LENGTH_SHORT).show();
-
             }else if (btnName.equals("imgBtnGallery")){
 
                 Toast.makeText(context , "Get Gallery" , Toast.LENGTH_SHORT).show();
 
             }
         }
+    }
+
+    public void launchCamera(Context context){
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

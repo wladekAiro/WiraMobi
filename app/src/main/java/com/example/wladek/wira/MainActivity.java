@@ -1,6 +1,8 @@
 package com.example.wladek.wira;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -9,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.wladek.wira.fragments.tab_fragments.ClaimsFragment;
 import com.example.wladek.wira.fragments.tab_fragments.ExpenseFragment;
@@ -80,10 +84,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void showGalleryOptions() {
 
-        Dialog dialog = new Dialog(this);
+        Dialog dialog = new Dialog(getApplicationContext());
         dialog.setContentView(R.layout.select_gallery_layout);
         dialog.setTitle(" Upload from ... ");
         dialog.setCancelable(true);
+
+        ImageButton imgBtnGallery = (ImageButton) dialog.findViewById(R.id.imgBtnGallery);
+        ImageButton imgBtnCam = (ImageButton) dialog.findViewById(R.id.imgBtnCam);
+
+        imgBtnCam.setOnClickListener(new CustomClickListener(getApplicationContext(), "imgBtnCam"));
+        imgBtnGallery.setOnClickListener(new CustomClickListener(getApplicationContext(), "imgBtnGallery"));
 
         dialog.show();
 
@@ -120,5 +130,32 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(ProfileFragment.newInstance("Data for Pf fragment 3"), "Profile");
 
         viewPager.setAdapter(viewPagerAdapter);
+    }
+
+    private class CustomClickListener implements View.OnClickListener {
+        String btnName;
+        Context context;
+        public CustomClickListener(Context context, String imgBtnCam) {
+            this.btnName = imgBtnCam;
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (btnName.equals("imgBtnCam")){
+
+                Toast.makeText(context, "Get Camera", Toast.LENGTH_SHORT).show();
+
+            }else if (btnName.equals("imgBtnGallery")){
+
+                Toast.makeText(context , "Get Gallery" , Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
