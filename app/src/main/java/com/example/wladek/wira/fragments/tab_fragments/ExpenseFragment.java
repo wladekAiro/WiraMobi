@@ -1,5 +1,6 @@
 package com.example.wladek.wira.fragments.tab_fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wladek.wira.R;
 import com.example.wladek.wira.pojo.Item;
@@ -104,6 +108,7 @@ public class ExpenseFragment extends Fragment {
                 viewHolder.txtClaimAmount = (TextView) convertView.findViewById(R.id.txtClaimAmount);
                 viewHolder.txtClaimCenter = (TextView) convertView.findViewById(R.id.txtClaimCenter);
                 viewHolder.txtClaimDate = (TextView) convertView.findViewById(R.id.txtClaimDate);
+                viewHolder.imgItemView = (ImageView) convertView.findViewById(R.id.imgItemView);
 
                 convertView.setTag(viewHolder);
 
@@ -116,15 +121,40 @@ public class ExpenseFragment extends Fragment {
             viewHolder.txtClaimCenter.setText(lstItem.getClaimCenter());
             viewHolder.txtClaimDate.setText(lstItem.getClaimDate());
 
+            viewHolder.imgItemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showGalleryOptions();
+                }
+            });
+
             return convertView;
         }
     }
 
     static class ViewHolder{
+        ImageView imgItemView;
         TextView txtClaimTitle;
         TextView txtClaimCenter;
         TextView txtClaimDate;
         TextView txtClaimAmount;
+    }
+
+    private void showGalleryOptions() {
+
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.select_gallery_layout);
+        dialog.setTitle(" Upload from ... ");
+        dialog.setCancelable(true);
+
+        ImageButton imgBtnGallery = (ImageButton) dialog.findViewById(R.id.imgBtnGallery);
+        ImageButton imgBtnCam = (ImageButton) dialog.findViewById(R.id.imgBtnCam);
+
+        imgBtnCam.setOnClickListener(new CustomClickListener(getContext() , "imgBtnCam"));
+        imgBtnGallery.setOnClickListener(new CustomClickListener(getContext() , "imgBtnGallery"));
+
+        dialog.show();
+
     }
 
     private void loadData() {
@@ -166,5 +196,27 @@ public class ExpenseFragment extends Fragment {
         item.setClaimDate("Aug 7, 2016");
         item.setClaimAmount("Ksh. 250");
         expenseItems.add(item);
+    }
+
+    private class CustomClickListener implements View.OnClickListener {
+        String btnName;
+        Context context;
+        public CustomClickListener(Context context, String imgBtnCam) {
+            this.btnName = imgBtnCam;
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (btnName.equals("imgBtnCam")){
+
+                Toast.makeText(context , "Get Camera" , Toast.LENGTH_SHORT).show();
+
+            }else if (btnName.equals("imgBtnGallery")){
+
+                Toast.makeText(context , "Get Gallery" , Toast.LENGTH_SHORT).show();
+
+            }
+        }
     }
 }

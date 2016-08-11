@@ -10,14 +10,16 @@
 
         <ImageView
             android:layout_width="150px"
-            android:layout_height="100px"
-            android:id="@+id/imageView"
+            android:layout_height="110px"
+            android:layout_marginTop="10dp"
+            android:id="@+id/imgItemView"
             android:src="@mipmap/lady_bird" />
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="152dp"
-            android:layout_height="80dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
             android:weightSum="1">
 
             <TextView
@@ -39,7 +41,8 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="80dp">
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
