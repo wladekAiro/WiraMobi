@@ -1,52 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:weightSum="1">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="65dp"
+        android:orientation="horizontal">
 
         <ImageButton
+            android:id="@+id/imgBtnGallery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imgBtnGallery"
-            android:src="@android:drawable/ic_menu_gallery"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:src="@android:drawable/ic_menu_gallery" />
 
         <TextView
+            android:id="@+id/txtGallery"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Gallery"
-            android:id="@+id/textView"
-            android:layout_weight="0.00"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="12dp"
-            android:layout_marginLeft="5dp"/>
+            android:layout_weight="0.00"
+            android:text="Chose from gallery"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#A5DC86"
+            android:textSize="40px" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="63dp">
+        android:layout_height="63dp"
+        android:orientation="horizontal">
 
         <ImageButton
+            android:id="@+id/imgBtnCam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imgBtnCam"
-            android:src="@android:drawable/ic_menu_camera"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:src="@android:drawable/ic_menu_camera" />
 
         <TextView
+            android:id="@+id/txtCamera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Camera"
-            android:id="@+id/textView2"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="12dp"
-            android:layout_marginLeft="5dp"/>
+            android:text="Take photo"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#A5DC86"
+            android:textSize="40px" />
     </LinearLayout>
 
 </LinearLayout>

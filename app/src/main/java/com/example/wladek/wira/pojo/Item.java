@@ -1,13 +1,19 @@
 package com.example.wladek.wira.pojo;
 
+import android.graphics.Bitmap;
+
+import java.io.Serializable;
+
+
 /**
  * Created by wladek on 8/9/16.
  */
-public class Item {
+public class Item implements Serializable {
     private String claimTitle;
     private String claimCenter;
     private String claimDate;
     private String claimAmount;
+    private String imagePath;
 
 
     public Item(){
@@ -44,5 +50,13 @@ public class Item {
 
     public void setClaimAmount(String claimAmount) {
         this.claimAmount = claimAmount;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
