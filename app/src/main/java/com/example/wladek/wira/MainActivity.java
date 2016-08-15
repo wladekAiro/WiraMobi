@@ -1,10 +1,8 @@
 package com.example.wladek.wira;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -25,13 +23,10 @@ import com.example.wladek.wira.fragments.tab_fragments.ProfileFragment;
 import com.example.wladek.wira.pager_adapters.ViewPagerAdapter;
 import com.example.wladek.wira.pojo.Item;
 import com.kosalgeek.android.photoutil.CameraPhoto;
-import com.kosalgeek.android.photoutil.ImageLoader;
+import com.kosalgeek.android.photoutil.GalleryPhoto;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,11 +37,17 @@ public class MainActivity extends AppCompatActivity {
             android.R.drawable.ic_menu_help};
 
     final int CAMERA_REQUEST = 321;
+    final int GALLERY_REQUEST = 3233;
     final int RESULT_OK = -1;
+
     CameraPhoto cameraPhoto;
+    GalleryPhoto galleryPhoto;
 
     ArrayList<Item> expenseItems = new ArrayList<>();
     ExpenseFragment expenseFragment;
+
+    MaterialDialog.Builder materialDialog;
+    MaterialDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +99,12 @@ public class MainActivity extends AppCompatActivity {
     private void showGalleryOptions() {
         boolean wrapInScrollView = true;
 
-        MaterialDialog.Builder materialDialog = new MaterialDialog.Builder(this);
+        materialDialog = new MaterialDialog.Builder(this);
         materialDialog.title("Upload");
         materialDialog.customView(R.layout.select_gallery_layout, wrapInScrollView);
         materialDialog.cancelable(true);
 
-        MaterialDialog dialog = materialDialog.build();
+        dialog = materialDialog.build();
         dialog.show();
 
         View customView = dialog.getCustomView();
@@ -167,13 +168,15 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (btnName.equals("imgBtnCam")) {
 
+                dialog.dismiss();
+
                 launchCamera(context);
 
             } else if (btnName.equals("imgBtnGallery")) {
-
-                Toast.makeText(context, "Get Gallery", Toast.LENGTH_SHORT).show();
-
+                dialog.dismiss();
+                launchGallery(context);
             }
+
         }
     }
 
@@ -188,15 +191,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void launchGallery(Context context){
+        galleryPhoto = new GalleryPhoto(context);
+        startActivityForResult(galleryPhoto.openGalleryIntent() , GALLERY_REQUEST);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String photoPath = null;
+
         if (resultCode == RESULT_OK) {
             if (requestCode == CAMERA_REQUEST) {
 
-                String photoPath = cameraPhoto.getPhotoPath();
-
+                photoPath = cameraPhoto.getPhotoPath();
                 updateExpense(photoPath);
 
+            }else if (requestCode == GALLERY_REQUEST){
+                Uri uri = data.getData();
+                galleryPhoto.setPhotoUri(uri);
+                photoPath = galleryPhoto.getPath();
+                updateExpense(photoPath);
             }
         }
     }
@@ -205,10 +219,6 @@ public class MainActivity extends AppCompatActivity {
 
         Item item = new Item();
         item.setImagePath(imageSrc);
-        item.setClaimTitle("Break fast");
-        item.setClaimCenter("BBQ Central");
-        item.setClaimDate("Aug 2, 2016");
-        item.setClaimAmount("Ksh. 100");
 
         if (expenseFragment != null) {
             expenseFragment.getExpenseItems().add(item);
