@@ -29,13 +29,6 @@
                 android:id="@+id/txtClaimTitle"
                 android:layout_weight="0.03"
                 android:textSize="40px"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BBQ Central"
-                android:id="@+id/txtClaimCenter"
-                android:textSize="40px"/>
         </LinearLayout>
 
         <LinearLayout

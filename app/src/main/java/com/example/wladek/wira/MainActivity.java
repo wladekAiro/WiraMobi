@@ -21,12 +21,15 @@ import com.example.wladek.wira.fragments.tab_fragments.ClaimsFragment;
 import com.example.wladek.wira.fragments.tab_fragments.ExpenseFragment;
 import com.example.wladek.wira.fragments.tab_fragments.ProfileFragment;
 import com.example.wladek.wira.pager_adapters.ViewPagerAdapter;
-import com.example.wladek.wira.pojo.Item;
+import com.example.wladek.wira.pojo.ExpenseItem;
+import com.example.wladek.wira.utils.DatabaseHelper;
 import com.kosalgeek.android.photoutil.CameraPhoto;
 import com.kosalgeek.android.photoutil.GalleryPhoto;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,15 +46,20 @@ public class MainActivity extends AppCompatActivity {
     CameraPhoto cameraPhoto;
     GalleryPhoto galleryPhoto;
 
-    ArrayList<Item> expenseItems = new ArrayList<>();
+    ArrayList<ExpenseItem> expenseExpenseItems = new ArrayList<>();
     ExpenseFragment expenseFragment;
 
     MaterialDialog.Builder materialDialog;
     MaterialDialog dialog;
 
+    DatabaseHelper myDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        myDb = new DatabaseHelper(this);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -217,13 +225,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateExpense(String imageSrc) {
 
-        Item item = new Item();
-        item.setImagePath(imageSrc);
+        SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+
+        ExpenseItem expenseItem = new ExpenseItem();
+        expenseItem.setImagePath(imageSrc);
+        expenseItem.setExpenseDate(format.format(new Date()));
+        expenseItem.setExpenseAmount(new Double(0));
+
+        expenseItem = myDb.save(expenseItem);
 
         if (expenseFragment != null) {
-            expenseFragment.getExpenseItems().add(item);
+            expenseFragment.getExpenseExpenseItems().add(expenseItem);
             expenseFragment.updateFragment1ListView();
         }
 
     }
+
 }

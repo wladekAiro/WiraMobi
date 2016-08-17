@@ -1,34 +1,32 @@
 package com.example.wladek.wira.fragments.tab_fragments;
 
-import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.wladek.wira.MainActivity;
 import com.example.wladek.wira.R;
-import com.example.wladek.wira.activity.ClaimActivity;
-import com.example.wladek.wira.pojo.Item;
+import com.example.wladek.wira.activity.ExpenseActivity;
+import com.example.wladek.wira.pojo.ExpenseItem;
+import com.example.wladek.wira.utils.DatabaseHelper;
 import com.kosalgeek.android.photoutil.CameraPhoto;
-import com.kosalgeek.android.photoutil.ImageLoader;
+import com.squareup.picasso.Picasso;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -49,7 +47,7 @@ public class ExpenseFragment extends Fragment {
 
     String photoPath = "";
 
-    ArrayList<Item> expenseItems = new ArrayList<>();
+    ArrayList<ExpenseItem> expenseExpenseItems = new ArrayList<>();
 
     CustomListAdaptor customListAdaptor;
 
@@ -78,11 +76,15 @@ public class ExpenseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.expense_layout, container, false);
 
+//        myDb = new DatabaseHelper(getActivity());
+
+        loadExpenses();
+
         listView = (ListView) myView.findViewById(R.id.lstExpenses);
 
-        Log.e("liST SIZE +++ ", " " + expenseItems.size());
+        Log.e(TAG+" liST SIZE +++ ", " " + expenseExpenseItems.size());
 
-        customListAdaptor = new CustomListAdaptor(this.getActivity(), expenseItems);
+        customListAdaptor = new CustomListAdaptor(this.getActivity(), expenseExpenseItems);
         listView.setAdapter(customListAdaptor);
 
         return myView;
@@ -91,13 +93,17 @@ public class ExpenseFragment extends Fragment {
     public class CustomListAdaptor extends BaseAdapter {
 
         private LayoutInflater layoutInflater;
-        private ArrayList<Item> itemsList = new ArrayList<Item>();
+        private ArrayList<ExpenseItem> itemsList = new ArrayList<ExpenseItem>();
 
         ViewHolder viewHolder;
+        Context context;
+        Picasso mPicasso;
 
-        public CustomListAdaptor(Context context, ArrayList<Item> expenseItems) {
+        public CustomListAdaptor(Context context, ArrayList<ExpenseItem> expenseExpenseItems) {
             layoutInflater = LayoutInflater.from(context);
-            this.itemsList = expenseItems;
+            this.itemsList = expenseExpenseItems;
+            this.context = context;
+            this.mPicasso = Picasso.with(context);
         }
 
         @Override
@@ -117,7 +123,7 @@ public class ExpenseFragment extends Fragment {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            final Item lstItem = itemsList.get(position);
+            final ExpenseItem lstExpenseItem = itemsList.get(position);
 
             if (convertView == null) {
 
@@ -126,7 +132,6 @@ public class ExpenseFragment extends Fragment {
                 viewHolder = new ViewHolder();
                 viewHolder.txtClaimTitle = (TextView) convertView.findViewById(R.id.txtClaimTitle);
                 viewHolder.txtClaimAmount = (TextView) convertView.findViewById(R.id.txtClaimAmount);
-                viewHolder.txtClaimCenter = (TextView) convertView.findViewById(R.id.txtClaimCenter);
                 viewHolder.txtClaimDate = (TextView) convertView.findViewById(R.id.txtClaimDate);
                 viewHolder.imgItemView = (ImageView) convertView.findViewById(R.id.imgItemView);
 
@@ -136,25 +141,31 @@ public class ExpenseFragment extends Fragment {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            viewHolder.txtClaimTitle.setText(lstItem.getClaimTitle());
-            viewHolder.txtClaimAmount.setText(lstItem.getClaimAmount());
-            viewHolder.txtClaimCenter.setText(lstItem.getClaimCenter());
-            viewHolder.txtClaimDate.setText(lstItem.getClaimDate());
+            viewHolder.txtClaimTitle.setText(lstExpenseItem.getExpenseName());
+            viewHolder.txtClaimAmount.setText(lstExpenseItem.getExpenseAmount()+"");
+            viewHolder.txtClaimDate.setText(lstExpenseItem.getExpenseDate());
 
-            if (lstItem.getImagePath() != null) {
-                try {
-                    Bitmap bitmap = ImageLoader.init().from(lstItem.getImagePath()).requestSize(100, 100).getBitmap();
-                    viewHolder.imgItemView.setImageBitmap(bitmap);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+            if (lstExpenseItem.getImagePath() != null) {
+
+                mPicasso
+                        .load(new File(lstExpenseItem.getImagePath()))
+                        .placeholder(R.drawable.ic_launcher)
+                        .error(R.drawable.error_circle)
+                        .resize(250, 200)
+                        .into(viewHolder.imgItemView);
+//                try {
+//                    Bitmap bitmap = ImageLoader.init().from(lstExpenseItem.getImagePath()).requestSize(250, 250).getBitmap();
+//                    viewHolder.imgItemView.setImageBitmap(bitmap);
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
             }
 
             viewHolder.imgItemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     itemPosition = position;
-                    showGalleryOptions(lstItem);
+                    showGalleryOptions(lstExpenseItem);
                 }
             });
 
@@ -162,7 +173,7 @@ public class ExpenseFragment extends Fragment {
         }
 
         public void setImageInItem(int position, String imageSrc) {
-            Item dataSet = itemsList.get(position);
+            ExpenseItem dataSet = itemsList.get(position);
             dataSet.setImagePath(imageSrc);
             notifyDataSetChanged();
         }
@@ -171,14 +182,13 @@ public class ExpenseFragment extends Fragment {
     static class ViewHolder {
         ImageView imgItemView;
         TextView txtClaimTitle;
-        TextView txtClaimCenter;
         TextView txtClaimDate;
         TextView txtClaimAmount;
     }
 
-    private void showGalleryOptions(Item item) {
-        Intent intent = new Intent(getActivity(), ClaimActivity.class);
-        intent.putExtra("item", item);
+    private void showGalleryOptions(ExpenseItem expenseItem) {
+        Intent intent = new Intent(getActivity(), ExpenseActivity.class);
+        intent.putExtra("expenseItem", expenseItem);
         startActivity(intent);
     }
 
@@ -235,12 +245,45 @@ public class ExpenseFragment extends Fragment {
 
     }
 
-    public void setExpenseItems(ArrayList<Item> expenseItems) {
-        this.expenseItems = expenseItems;
+    public void setExpenseExpenseItems(ArrayList<ExpenseItem> expenseExpenseItems) {
+        this.expenseExpenseItems = expenseExpenseItems;
     }
 
-    public ArrayList<Item> getExpenseItems() {
-        return expenseItems;
+    public void loadExpenses(){
+        expenseExpenseItems.clear();
+        LoadExpensesTask task = (LoadExpensesTask) new LoadExpensesTask().execute();
+//        expenseExpenseItems.addAll(myDb.getExpenseItems());
+    }
+
+    public class LoadExpensesTask extends AsyncTask<DatabaseHelper , Void , Void>{
+
+        protected ProgressDialog mProgressDialog;
+        private DatabaseHelper helper;
+
+        @Override
+        protected Void doInBackground(DatabaseHelper... params) {
+            helper = new DatabaseHelper(getActivity());
+            expenseExpenseItems.addAll(helper.getExpenseItems());
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setMessage("Please wait...");
+            mProgressDialog.getWindow().setGravity(Gravity.CENTER);
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    public ArrayList<ExpenseItem> getExpenseExpenseItems() {
+        return expenseExpenseItems;
     }
 
     public void updateFragment1ListView() {
