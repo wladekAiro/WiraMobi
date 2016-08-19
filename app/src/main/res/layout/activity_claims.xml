@@ -23,14 +23,6 @@
 
     <include layout="@layout/content_claims" />
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fabClaim"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--android:src="@android:drawable/ic_dialog_email" />-->
-
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/right_labels"
         android:layout_width="wrap_content"
@@ -44,10 +36,10 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin">
 
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fbEdit"/>
+        <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/fbEdit"/>-->
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"

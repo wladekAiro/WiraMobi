@@ -57,4 +57,23 @@ public class ExpenseItem implements Serializable {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
+
+    @Override
+    public String toString() {
+        return expenseName + "  "+expenseDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        ExpenseItem i = (ExpenseItem) o;
+
+        if (id.equals(i.getId())){
+            return true;
+        }else if (imagePath.equals(i.getImagePath())){
+            return true;
+        }
+
+        return false;
+    }
 }

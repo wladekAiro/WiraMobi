@@ -10,7 +10,7 @@ public class ExpenseClaim implements Serializable{
     private Long id;
     private String title;
     private String description;
-    private ArrayList<ExpenseItem> expenses;
+    private ArrayList<ExpenseItem> expenses = new ArrayList<>();
     private Double totalAmount;
 
     public ExpenseClaim(){

@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<ExpenseItem> expenseExpenseItems = new ArrayList<>();
     ExpenseFragment expenseFragment;
 
-    MaterialDialog.Builder materialDialog;
+    MaterialDialog.Builder builder;
     MaterialDialog dialog;
 
     DatabaseHelper myDb;
@@ -195,12 +195,12 @@ public class MainActivity extends AppCompatActivity {
     private void showGalleryOptions() {
         boolean wrapInScrollView = true;
 
-        materialDialog = new MaterialDialog.Builder(this);
-        materialDialog.title("Upload");
-        materialDialog.customView(R.layout.select_gallery_layout, wrapInScrollView);
-        materialDialog.cancelable(true);
+        builder = new MaterialDialog.Builder(this);
+        builder.title("Upload");
+        builder.customView(R.layout.select_gallery_layout, wrapInScrollView);
+        builder.cancelable(true);
 
-        dialog = materialDialog.build();
+        dialog = builder.build();
         dialog.show();
 
         View customView = dialog.getCustomView();

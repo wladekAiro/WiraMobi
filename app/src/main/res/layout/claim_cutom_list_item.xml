@@ -4,10 +4,33 @@
     android:layout_height="150px"
     android:weightSum="1">
 
-    <TextView
-        android:layout_width="189dp"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/txtClaimTitle"
-        android:layout_weight="0.07" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="200px"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/txtClaimTitle"
+            android:layout_weight="1"
+            android:textSize="25dp"/>
+
+        <TextView
+            android:layout_width="100px"
+            android:layout_height="wrap_content"
+            android:text="Total :"
+            android:id="@+id/textView"
+            android:layout_weight="1"
+            android:textSize="25dp"/>
+
+        <TextView
+            android:layout_width="200px"
+            android:layout_height="wrap_content"
+            android:text="780"
+            android:id="@+id/txtClaimTotal"
+            android:layout_weight="1"
+            android:textSize="25dp"/>
+    </LinearLayout>
 </LinearLayout>

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.wladek.wira.R;
 import com.example.wladek.wira.pojo.ExpenseClaim;
+import com.example.wladek.wira.pojo.ExpenseItem;
 import com.example.wladek.wira.utils.DatabaseHelper;
 
 import java.util.ArrayList;
@@ -50,9 +51,9 @@ public class ClaimsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbHelper = new DatabaseHelper(this.getActivity());
 
-        loadClaims();
+        dbHelper = new DatabaseHelper(getActivity());
+
     }
 
     @Nullable
@@ -63,6 +64,11 @@ public class ClaimsFragment extends Fragment {
         lstClaims = (ListView) myView.findViewById(R.id.lstClaims);
 
         customListAdaptor = new CustomListAdaptor(this.getActivity() , claims);
+        lstClaims.setAdapter(customListAdaptor);
+
+        loadClaims();
+
+        updateFragmentListView();
 
         return myView;
     }
@@ -101,11 +107,13 @@ public class ClaimsFragment extends Fragment {
             final ExpenseClaim expenseClaim = expenseClaims.get(position);
 
             if (convertView == null){
+
                 convertView = layoutInflater.inflate(R.layout.claim_cutom_list_item , null);
 
                 viewHolder = new ViewHolder();
 
                 viewHolder.claimTitle = (TextView) convertView.findViewById(R.id.txtClaimTitle);
+                viewHolder.txtClaimTotal = (TextView) convertView.findViewById(R.id.txtClaimTotal);
 
                 convertView.setTag(viewHolder);
 
@@ -113,7 +121,16 @@ public class ClaimsFragment extends Fragment {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
+            Double total = new Double(0);
+
+            if (!expenseClaim.getExpenses().isEmpty()) {
+                for (ExpenseItem i : expenseClaim.getExpenses()) {
+                    total = total + i.getExpenseAmount();
+                }
+            }
+
             viewHolder.claimTitle.setText(expenseClaim.getTitle());
+            viewHolder.txtClaimTotal.setText("Ksh "+total);
 
             return convertView;
         }
@@ -121,10 +138,17 @@ public class ClaimsFragment extends Fragment {
 
     static class ViewHolder{
         TextView claimTitle;
+        TextView txtClaimTotal;
     }
 
-    private void loadClaims() {
+    public void loadClaims() {
         claims.clear();
         claims.addAll(dbHelper.getClaims());
+    }
+
+    public void updateFragmentListView() {
+        if (customListAdaptor != null) {
+            customListAdaptor.notifyDataSetChanged();
+        }
     }
 }
