@@ -125,6 +125,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 return "Expense claim not saved";
 
+            } else {
+                response = "Saved";
             }
         } else {
             //Update
@@ -132,12 +134,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put("CLAIM_TITLE", expenseClaim.getTitle());
             contentValues.put("CLAIM_DESCRIPTION", expenseClaim.getDescription());
 
-            int result = db.update(TABLE_EXPENSE_CLAIMS, contentValues, "ID='" + expenseClaim.getId(), null);
+            try {
+                int result = db.update(TABLE_EXPENSE_CLAIMS, contentValues, "ID='" + expenseClaim.getId()+"'", null);
 
-            if (result == -1) {
+                if (result == -1) {
 
-                return "Expense claim not updated";
+                    return "Expense claim not updated";
 
+                } else {
+                    response = "Updated";
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
 
         }
@@ -150,7 +158,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 expenseClaim.setId(new Long(res.getInt(0)));
                 expenseClaim.setTitle(res.getString(1));
                 expenseClaim.setDescription(res.getString(2));
-                expenseClaim.setTotalAmount(res.getDouble(3));
             }
         }
 
@@ -208,10 +215,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 expenseClaim.setId(new Long(res.getInt(0)));
                 expenseClaim.setTitle(res.getString(1));
                 expenseClaim.setDescription(res.getString(2));
-                expenseClaim.setTotalAmount(res.getDouble(3));
 
                 Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_EXPENSES + " WHERE CLAIM_ID =?",
-                        new String[]{expenseClaim.getId()+""});
+                        new String[]{expenseClaim.getId() + ""});
 
                 if (cursor.getCount() > 0) {
                     while (cursor.moveToNext()) {
@@ -237,14 +243,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return claims;
     }
 
-    public ArrayList<ExpenseItem> getClaimExpenses(ExpenseClaim expenseClaim){
+    public ArrayList<ExpenseItem> getClaimExpenses(ExpenseClaim expenseClaim) {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
         ArrayList<ExpenseItem> expenseItems = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_EXPENSES + " WHERE CLAIM_ID =?",
-                new String[]{expenseClaim.getId()+""});
+                new String[]{expenseClaim.getId() + ""});
 
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {

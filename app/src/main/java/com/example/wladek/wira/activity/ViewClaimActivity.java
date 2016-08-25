@@ -13,8 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.wladek.wira.R;
 import com.example.wladek.wira.pojo.ExpenseClaim;
 import com.example.wladek.wira.pojo.ExpenseItem;
@@ -35,12 +35,16 @@ public class ViewClaimActivity extends AppCompatActivity {
     LinearLayout layoutExpenses;
     LinearLayout layoutAttach;
 
-    ArrayList<ExpenseItem> expenseItems = new ArrayList<>();
+    ArrayList<ExpenseItem> claimExpenses = new ArrayList<>();
+    ArrayList<ExpenseItem> expenses = new ArrayList<>();
 
     CustomAdaptor customListAdaptor;
 
     DatabaseHelper dbHelper;
     ActionBar actionBar;
+
+    MaterialDialog.Builder builder;
+    MaterialDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,19 +76,19 @@ public class ViewClaimActivity extends AppCompatActivity {
             txtClaimTitle.setText("Add expense");
         }
 
-        customListAdaptor = new CustomAdaptor(getApplicationContext() , expenseItems);
+        customListAdaptor = new CustomAdaptor(getApplicationContext() , claimExpenses);
         lstClaimExpenses.setAdapter(customListAdaptor);
 
         Double total = new Double(0);
 
-        if (expenseItems.isEmpty()){
+        if (claimExpenses.isEmpty()){
             layoutExpenses.setVisibility(View.INVISIBLE);
             txtNoExpenses.setVisibility(View.VISIBLE);
         }else {
             layoutExpenses.setVisibility(View.VISIBLE);
             txtNoExpenses.setVisibility(View.INVISIBLE);
 
-            for (ExpenseItem i : expenseItems){
+            for (ExpenseItem i : claimExpenses){
                 total = total+i.getExpenseAmount();
             }
         }
@@ -94,7 +98,7 @@ public class ViewClaimActivity extends AppCompatActivity {
         layoutAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext() , "Attaching expense" , Toast.LENGTH_LONG).show();
+                attachExpense();
             }
         });
     }
@@ -174,7 +178,21 @@ public class ViewClaimActivity extends AppCompatActivity {
     }
 
     public void loadClaimExpenses(ExpenseClaim expenseClaim){
-        expenseItems.clear();
-        expenseItems.addAll(dbHelper.getClaimExpenses(expenseClaim));
+        claimExpenses.clear();
+        claimExpenses.addAll(dbHelper.getClaimExpenses(expenseClaim));
+    }
+
+    public void attachExpense(){
+        loadExpenses();
+        builder = new MaterialDialog.Builder(this);
+        builder.title("Select expense");
+        builder.positiveText("Ok");
+        dialog = builder.build();
+        dialog.show();
+    }
+
+    private void loadExpenses() {
+        expenses.clear();
+        expenses.addAll(dbHelper.getExpenseItems());
     }
 }
