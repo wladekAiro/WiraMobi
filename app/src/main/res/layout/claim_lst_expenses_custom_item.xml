@@ -10,10 +10,10 @@
         android:layout_height="70dp">
 
         <ImageView
-            android:layout_width="150px"
-            android:layout_height="90px"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_marginTop="10dp"
-            android:id="@+id/imgIconView"
+            android:id="@+id/imgExpensePic"
             android:src="@mipmap/doument_text_icon" />
 
         <LinearLayout
@@ -27,9 +27,12 @@
                 android:layout_width="136dp"
                 android:layout_height="wrap_content"
                 android:text="Lunch"
-                android:id="@+id/txtClaimTitle"
+                android:id="@+id/txtExpenseTitle"
                 android:layout_weight="0.03"
-                android:textSize="40px"/>
+                android:textSize="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="#FF153F5C"/>
         </LinearLayout>
 
         <LinearLayout
@@ -38,25 +41,20 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp">
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Aug 9, 2016"-->
-                <!--android:id="@+id/txtClaimDate"-->
-                <!--android:textSize="40px"/>-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aug 9, 2016"
+                android:id="@+id/txtExpenseAmount"
+                android:textSize="15dp"
+                android:textColor="#FF153F5C"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="70px"
-                android:text="Open"
-                android:id="@+id/btnOpen"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ksh 250"
-                android:id="@+id/txtClaimTotal"
-                android:textSize="25px"/>
+                android:text="Remove"
+                android:id="@+id/btnAttachExpense"
+                android:textSize="10dp"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

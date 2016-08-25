@@ -6,11 +6,17 @@ android {
 
     defaultConfig {
         applicationId "com.example.wladek.wira"
+        generatedDensities = []
         minSdkVersion 10
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
+
+    aaptOptions {
+        additionalParameters "--no-version-vectors"
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,4 +35,19 @@ dependencies {
     compile 'com.afollestad.material-dialogs:commons:0.9.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.getbase:floatingactionbutton:1.10.1'
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.google.android.gms:play-services-appindexing:9.4.0'
+}
+
+afterEvaluate {
+    tasks.matching {
+        it.name.startsWith('dex')
+    }.each { dx ->
+        if (dx.additionalParameters == null) {
+            dx.additionalParameters = []
+        }
+        dx.additionalParameters += '--multi-dex'
+        dx.additionalParameters += "--main-dex-list=$projectDir/multidex.keep".toString()
+    }
 }

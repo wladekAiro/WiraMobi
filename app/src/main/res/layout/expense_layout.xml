@@ -10,5 +10,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lstExpenses"
-        android:layout_marginTop="115px"/>
+        android:layout_marginTop="60dp"/>
 </LinearLayout>

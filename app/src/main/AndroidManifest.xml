@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.wladek.wira">
 
+    <uses-sdk tools:overrideLibrary="com.getbase.floatingactionbutton" />
+
     <uses-feature
         android:name="android.hardware.camera2"
         android:required="true" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-sdk tools:overrideLibrary="com.getbase.floatingactionbutton"/>
 
     <application
         android:allowBackup="true"
@@ -34,7 +35,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ClaimsActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.ViewClaimActivity"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

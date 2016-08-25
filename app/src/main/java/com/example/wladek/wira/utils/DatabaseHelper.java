@@ -236,4 +236,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return claims;
     }
+
+    public ArrayList<ExpenseItem> getClaimExpenses(ExpenseClaim expenseClaim){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ArrayList<ExpenseItem> expenseItems = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_EXPENSES + " WHERE CLAIM_ID =?",
+                new String[]{expenseClaim.getId()+""});
+
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+
+                ExpenseItem expenseItem = new ExpenseItem();
+
+                expenseItem.setId(new Long(cursor.getInt(0)));
+                expenseItem.setExpenseName(cursor.getString(1));
+                expenseItem.setExpenseDate(cursor.getString(2));
+                expenseItem.setImagePath(cursor.getString(3));
+                expenseItem.setExpenseAmount(cursor.getDouble(4));
+
+                expenseItems.add(expenseItem);
+            }
+        }
+
+        db.close();
+
+        return expenseItems;
+    }
 }

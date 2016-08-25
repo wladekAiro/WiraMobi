@@ -1,6 +1,7 @@
 package com.example.wladek.wira.fragments.tab_fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.wladek.wira.R;
+import com.example.wladek.wira.activity.ViewClaimActivity;
 import com.example.wladek.wira.pojo.ExpenseClaim;
 import com.example.wladek.wira.pojo.ExpenseItem;
 import com.example.wladek.wira.utils.DatabaseHelper;
@@ -114,12 +118,28 @@ public class ClaimsFragment extends Fragment {
 
                 viewHolder.claimTitle = (TextView) convertView.findViewById(R.id.txtClaimTitle);
                 viewHolder.txtClaimTotal = (TextView) convertView.findViewById(R.id.txtClaimTotal);
+                viewHolder.iconView = (ImageView) convertView.findViewById(R.id.imgIconView);
+                viewHolder.btnOpen = (Button) convertView.findViewById(R.id.btnOpen);
 
                 convertView.setTag(viewHolder);
 
             }else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
+
+            viewHolder.iconView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openClaim(expenseClaim);
+                }
+            });
+
+            viewHolder.btnOpen.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openClaim(expenseClaim);
+                }
+            });
 
             Double total = new Double(0);
 
@@ -139,6 +159,9 @@ public class ClaimsFragment extends Fragment {
     static class ViewHolder{
         TextView claimTitle;
         TextView txtClaimTotal;
+        ImageView iconView;
+        Button btnOpen;
+
     }
 
     public void loadClaims() {
@@ -150,5 +173,12 @@ public class ClaimsFragment extends Fragment {
         if (customListAdaptor != null) {
             customListAdaptor.notifyDataSetChanged();
         }
+    }
+
+    public void openClaim(ExpenseClaim expenseClaim){
+
+        Intent intent = new Intent(getActivity(), ViewClaimActivity.class);
+        intent.putExtra("claim", expenseClaim);
+        startActivity(intent);
     }
 }
