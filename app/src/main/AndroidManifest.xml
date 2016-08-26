@@ -36,9 +36,16 @@
         <activity
             android:name=".activity.ClaimsActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.ViewClaimActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activity.ViewClaimActivity"
+            android:parentActivityName=".MainActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".activity.AttachExpenseActivity"
+            android:parentActivityName=".activity.ViewClaimActivity"
+            android:noHistory="true"
+            android:launchMode="singleInstance"></activity>
     </application>
 
 </manifest>

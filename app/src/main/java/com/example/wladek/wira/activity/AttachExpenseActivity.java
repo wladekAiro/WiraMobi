@@ -1,7 +1,6 @@
 package com.example.wladek.wira.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,11 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wladek.wira.R;
 import com.example.wladek.wira.pojo.ExpenseClaim;
@@ -24,82 +24,42 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.ArrayList;
 
-public class ViewClaimActivity extends AppCompatActivity {
+public class AttachExpenseActivity extends AppCompatActivity {
 
     ExpenseClaim expenseClaim;
-
-    TextView txtClaimTitle;
-    ListView lstClaimExpenses;
-    TextView txtNoExpenses;
-    TextView txtTotalClaim;
-    LinearLayout layoutExpenses;
-    LinearLayout layoutAttach;
-
-    ArrayList<ExpenseItem> claimExpenses = new ArrayList<>();
-
-    CustomAdaptor customListAdaptor;
-
-    DatabaseHelper dbHelper;
+    DatabaseHelper databaseHelper;
     ActionBar actionBar;
+
+    ArrayList<ExpenseItem> expenses = new ArrayList<>();
+
+    ListView lstExpenses;
+
+    CustomAdaptor customAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_claim);
+        setContentView(R.layout.activity_attach_expense);
 
-        dbHelper = new DatabaseHelper(getApplicationContext());
+        databaseHelper = new DatabaseHelper(this);
+        loadExpenses();
+
+        actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
 
         expenseClaim = (ExpenseClaim) getIntent().getSerializableExtra("claim");
 
-        actionBar = getSupportActionBar();
-
         if (expenseClaim != null){
-            loadClaimExpenses(expenseClaim);
             actionBar.setTitle(expenseClaim.getTitle());
+
         }
 
-        layoutExpenses = (LinearLayout) findViewById(R.id.layoutExpenses);
-        layoutAttach = (LinearLayout) findViewById(R.id.layoutAttach);
-
-        txtClaimTitle = (TextView) findViewById(R.id.txtClaimTitle);
-        txtTotalClaim = (TextView) findViewById(R.id.txtTotalClaim);
-        txtNoExpenses = (TextView) findViewById(R.id.txtNoExpenses);
-        lstClaimExpenses = (ListView) findViewById(R.id.lstClaimExpenses);
-
-        if (expenseClaim == null){
-            expenseClaim = new ExpenseClaim();
-        }else{
-            txtClaimTitle.setText("Add expense");
-        }
-
-        customListAdaptor = new CustomAdaptor(getApplicationContext() , claimExpenses);
-        lstClaimExpenses.setAdapter(customListAdaptor);
-
-        Double total = new Double(0);
-
-        if (claimExpenses.isEmpty()){
-            layoutExpenses.setVisibility(View.INVISIBLE);
-            txtNoExpenses.setVisibility(View.VISIBLE);
-        }else {
-            layoutExpenses.setVisibility(View.VISIBLE);
-            txtNoExpenses.setVisibility(View.INVISIBLE);
-
-            for (ExpenseItem i : claimExpenses){
-                total = total+i.getExpenseAmount();
-            }
-        }
-
-        txtTotalClaim.setText("Ksh. "+total);
-
-        layoutAttach.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attachExpense();
-            }
-        });
+        lstExpenses = (ListView) findViewById(R.id.expensesListView);
+        customAdaptor = new CustomAdaptor(this , expenses);
+        lstExpenses.setAdapter(customAdaptor);
     }
 
-    private class CustomAdaptor extends BaseAdapter{
+    private class CustomAdaptor extends BaseAdapter {
 
         private Context context;
         private ArrayList<ExpenseItem> items = new ArrayList<>();
@@ -136,12 +96,12 @@ public class ViewClaimActivity extends AppCompatActivity {
             if (convertView == null){
                 viewHolder = new ViewHolder();
 
-                convertView = layoutInflater.inflate(R.layout.claim_lst_expenses_custom_item , null);
+                convertView = layoutInflater.inflate(R.layout.claim_lst_expenses_to_attach_custom_item , null);
 
                 viewHolder.imgExpensePic = (ImageView) convertView.findViewById(R.id.imgExpensePic);
                 viewHolder.txtExpenseTitle = (TextView) convertView.findViewById(R.id.txtExpenseTitle);
                 viewHolder.txtExpenseAmount = (TextView) convertView.findViewById(R.id.txtExpenseAmount);
-                viewHolder.btnAttachExpense = (Button) convertView.findViewById(R.id.btnAttachExpense);
+                viewHolder.checkBoxAttach = (CheckBox) convertView.findViewById(R.id.checkBoxAttach);
 
                 convertView.setTag(viewHolder);
 
@@ -160,32 +120,49 @@ public class ViewClaimActivity extends AppCompatActivity {
             }
 
             viewHolder.txtExpenseTitle.setText(expenseItem.getExpenseName());
-            viewHolder.txtExpenseAmount.setText("Ksh. "+expenseItem.getExpenseAmount());
+            viewHolder.txtExpenseAmount.setText("Ksh. " + expenseItem.getExpenseAmount());
+
+            viewHolder.checkBoxAttach.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        attachExpense(expenseItem, context);
+                    } else {
+                        removeExpense(expenseItem , context);
+                    }
+                }
+            });
 
             return convertView;
         }
+    }
+
+    private void removeExpense(ExpenseItem expenseItem , Context context) {
+        String response = databaseHelper.removeExpenseFromClaim(expenseItem);
+        Toast.makeText(context , response , Toast.LENGTH_SHORT).show();
+    }
+
+    private void attachExpense(ExpenseItem expenseItem , Context context) {
+        String response = databaseHelper.attachExpenseToClaim(expenseItem, expenseClaim.getId());
+        Toast.makeText(context , response , Toast.LENGTH_SHORT).show();
     }
 
     static class ViewHolder{
         ImageView imgExpensePic;
         TextView txtExpenseTitle;
         TextView txtExpenseAmount;
-        Button btnAttachExpense;
+        CheckBox checkBoxAttach;
     }
 
-    public void loadClaimExpenses(ExpenseClaim expenseClaim){
-        claimExpenses.clear();
-        claimExpenses.addAll(dbHelper.getClaimExpenses(expenseClaim));
-    }
-
-    public void attachExpense(){
-        Intent intent = new Intent(getApplicationContext() , AttachExpenseActivity.class);
-        intent.putExtra("claim", expenseClaim);
-        startActivityForResult(intent, 1);
+    private void loadExpenses() {
+        expenses.clear();
+        expenses.addAll(databaseHelper.getExpenseItems());
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        setResult(1);
     }
 }

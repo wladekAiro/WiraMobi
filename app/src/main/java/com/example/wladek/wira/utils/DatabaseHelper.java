@@ -135,7 +135,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put("CLAIM_DESCRIPTION", expenseClaim.getDescription());
 
             try {
-                int result = db.update(TABLE_EXPENSE_CLAIMS, contentValues, "ID='" + expenseClaim.getId()+"'", null);
+                int result = db.update(TABLE_EXPENSE_CLAIMS, contentValues, "ID='" + expenseClaim.getId() + "'", null);
 
                 if (result == -1) {
 
@@ -144,7 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 } else {
                     response = "Updated";
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -165,14 +165,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (!expenseClaim.getExpenses().isEmpty() && expenseClaim.getExpenses().size() > 0) {
 
-            response = attachExpenseToClaim(expenseClaim.getExpenses(), expenseClaim.getId());
+            response = attachExpensesToClaim(expenseClaim.getExpenses(), expenseClaim.getId());
 
         }
 
         return response;
     }
 
-    private String attachExpenseToClaim(ArrayList<ExpenseItem> expenseItems, Long id) {
+    private String attachExpensesToClaim(ArrayList<ExpenseItem> expenseItems, Long id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String response = null;
@@ -180,22 +180,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("CLAIM_ID", 0);
 
-        int result = 0;
-
         db.update(TABLE_EXPENSES, contentValues, "CLAIM_ID='" + id + "'", null);
 
         for (ExpenseItem i : expenseItems) {
             contentValues = new ContentValues();
             contentValues.put("CLAIM_ID", id);
 
-            result = db.update(TABLE_EXPENSES, contentValues, "EXPENSE_PHOTO_URL='" + i.getImagePath() + "'", null);
-
+            int result = db.update(TABLE_EXPENSES, contentValues, "EXPENSE_PHOTO_URL='" + i.getImagePath() + "'", null);
 
             if (result > 0) {
                 response = "Success";
             } else {
                 return "Failed to set claim on expense";
             }
+        }
+
+        return response;
+    }
+
+    public String attachExpenseToClaim(ExpenseItem expenseItem, Long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String response;
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("CLAIM_ID", id);
+
+        int result = db.update(TABLE_EXPENSES, contentValues, "EXPENSE_PHOTO_URL='" + expenseItem.getImagePath() + "'", null);
+
+
+        if (result > 0) {
+            response = "Attached";
+        } else {
+            return "Failed to attach expense";
+        }
+
+        return response;
+    }
+
+    public String removeExpenseFromClaim(ExpenseItem expenseItem) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String response;
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("CLAIM_ID", 0);
+
+        int result = db.update(TABLE_EXPENSES, contentValues, "EXPENSE_PHOTO_URL='" + expenseItem.getImagePath() + "'", null);
+
+
+        if (result > 0) {
+            response = "Detached";
+        } else {
+            return "Failed to detach expense";
         }
 
         return response;
