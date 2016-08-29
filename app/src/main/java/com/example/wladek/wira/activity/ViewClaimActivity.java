@@ -72,7 +72,12 @@ public class ViewClaimActivity extends AppCompatActivity {
             txtClaimTitle.setText("Add expense");
         }
 
-        customListAdaptor = new CustomAdaptor(getApplicationContext() , claimExpenses);
+        if (customListAdaptor == null) {
+            customListAdaptor = new CustomAdaptor(getApplicationContext(), claimExpenses);
+        }else {
+            customListAdaptor.notifyDataSetChanged();
+        }
+
         lstClaimExpenses.setAdapter(customListAdaptor);
 
         Double total = new Double(0);
@@ -187,5 +192,18 @@ public class ViewClaimActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (customListAdaptor != null){
+            customListAdaptor.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (customListAdaptor != null){
+            customListAdaptor.notifyDataSetChanged();
+        }
     }
 }
