@@ -12,6 +12,7 @@ public class ExpenseItem implements Serializable {
     private String expenseDate;
     private Double expenseAmount;
     private String imagePath;
+    private Long claimId;
 
 
     public ExpenseItem(){
@@ -56,6 +57,14 @@ public class ExpenseItem implements Serializable {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public Long getClaimId() {
+        return claimId;
+    }
+
+    public void setClaimId(Long claimId) {
+        this.claimId = claimId;
     }
 
     @Override

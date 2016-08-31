@@ -44,8 +44,8 @@
             android:launchMode="singleInstance"/>
         <activity android:name=".activity.AttachExpenseActivity"
             android:parentActivityName=".activity.ViewClaimActivity"
-            android:noHistory="true"
-            android:launchMode="singleInstance"></activity>
+            android:noHistory="false"
+            android:launchMode="singleTask"></activity>
     </application>
 
 </manifest>

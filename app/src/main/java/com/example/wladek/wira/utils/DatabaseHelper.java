@@ -58,6 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 expenseItem.setExpenseDate(res.getString(2));
                 expenseItem.setImagePath(res.getString(3));
                 expenseItem.setExpenseAmount(res.getDouble(4));
+                expenseItem.setClaimId(new Long(res.getInt(5)));
 
                 expenseItems.add(expenseItem);
             }
@@ -84,6 +85,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put("EXPENSE_PHOTO_URL", expenseItem.getImagePath());
             contentValues.put("EXPENSE_AMOUNT", expenseItem.getExpenseAmount());
 
+            if (expenseItem.getClaimId() != null) {
+                contentValues.put("CLAIM_ID", expenseItem.getClaimId());
+            }
+
             Long result = db.insert(TABLE_EXPENSES, null, contentValues);
 
             if (result == -1) {
@@ -98,6 +103,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put("EXPENSE_DATE", expenseItem.getExpenseDate());
             contentValues.put("EXPENSE_PHOTO_URL", expenseItem.getImagePath());
             contentValues.put("EXPENSE_AMOUNT", expenseItem.getExpenseAmount());
+
+            if (expenseItem.getClaimId() != null) {
+                contentValues.put("CLAIM_ID", expenseItem.getClaimId());
+            }
 
             db.update(TABLE_EXPENSES, contentValues, "EXPENSE_PHOTO_URL='" + pic_url + "'", null);
 
@@ -266,6 +275,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         expenseItem.setExpenseDate(cursor.getString(2));
                         expenseItem.setImagePath(cursor.getString(3));
                         expenseItem.setExpenseAmount(cursor.getDouble(4));
+                        expenseItem.setClaimId(new Long(cursor.getInt(5)));
 
                         expenseClaim.getExpenses().add(expenseItem);
                     }
@@ -299,6 +309,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 expenseItem.setExpenseDate(cursor.getString(2));
                 expenseItem.setImagePath(cursor.getString(3));
                 expenseItem.setExpenseAmount(cursor.getDouble(4));
+                expenseItem.setClaimId(new Long(cursor.getInt(5)));
 
                 expenseItems.add(expenseItem);
             }

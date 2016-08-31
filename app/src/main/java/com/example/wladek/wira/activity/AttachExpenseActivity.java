@@ -119,6 +119,12 @@ public class AttachExpenseActivity extends AppCompatActivity {
                         .into(viewHolder.imgExpensePic);
             }
 
+            if (expenseItem.getClaimId() != null){
+                if (expenseClaim.getId().equals(expenseItem.getClaimId())){
+                    viewHolder.checkBoxAttach.setChecked(true);
+                }
+            }
+
             viewHolder.txtExpenseTitle.setText(expenseItem.getExpenseName());
             viewHolder.txtExpenseAmount.setText("Ksh. " + expenseItem.getExpenseAmount());
 
@@ -128,7 +134,7 @@ public class AttachExpenseActivity extends AppCompatActivity {
                     if (isChecked) {
                         attachExpense(expenseItem, context);
                     } else {
-                        removeExpense(expenseItem , context);
+                        removeExpense(expenseItem, context);
                     }
                 }
             });
@@ -140,6 +146,7 @@ public class AttachExpenseActivity extends AppCompatActivity {
     private void removeExpense(ExpenseItem expenseItem , Context context) {
         String response = databaseHelper.removeExpenseFromClaim(expenseItem);
         Toast.makeText(context , response , Toast.LENGTH_SHORT).show();
+        setResult(1);
     }
 
     private void attachExpense(ExpenseItem expenseItem , Context context) {
@@ -158,5 +165,11 @@ public class AttachExpenseActivity extends AppCompatActivity {
     private void loadExpenses() {
         expenses.clear();
         expenses.addAll(databaseHelper.getExpenseItems());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadExpenses();
     }
 }
