@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wladek.wira.R;
 import com.example.wladek.wira.pojo.ExpenseClaim;
@@ -41,6 +42,7 @@ public class ViewClaimActivity extends AppCompatActivity {
 
     DatabaseHelper dbHelper;
     ActionBar actionBar;
+    Double total = new Double(0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class ViewClaimActivity extends AppCompatActivity {
 
         actionBar = getSupportActionBar();
 
-        if (expenseClaim != null){
+        if (expenseClaim != null) {
             loadClaimExpenses(expenseClaim);
             actionBar.setTitle(expenseClaim.getTitle());
         }
@@ -66,35 +68,21 @@ public class ViewClaimActivity extends AppCompatActivity {
         txtNoExpenses = (TextView) findViewById(R.id.txtNoExpenses);
         lstClaimExpenses = (ListView) findViewById(R.id.lstClaimExpenses);
 
-        if (expenseClaim == null){
+        if (expenseClaim == null) {
             expenseClaim = new ExpenseClaim();
-        }else{
+        } else {
             txtClaimTitle.setText("Add expense");
         }
 
         if (customListAdaptor == null) {
             customListAdaptor = new CustomAdaptor(getApplicationContext(), claimExpenses);
-        }else {
+        } else {
             customListAdaptor.notifyDataSetChanged();
         }
 
         lstClaimExpenses.setAdapter(customListAdaptor);
 
-        Double total = new Double(0);
-
-        if (claimExpenses.isEmpty()){
-            layoutExpenses.setVisibility(View.INVISIBLE);
-            txtNoExpenses.setVisibility(View.VISIBLE);
-        }else {
-            layoutExpenses.setVisibility(View.VISIBLE);
-            txtNoExpenses.setVisibility(View.INVISIBLE);
-
-            for (ExpenseItem i : claimExpenses){
-                total = total+i.getExpenseAmount();
-            }
-        }
-
-        txtTotalClaim.setText("Ksh. "+total);
+        checkData();
 
         layoutAttach.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +92,7 @@ public class ViewClaimActivity extends AppCompatActivity {
         });
     }
 
-    private class CustomAdaptor extends BaseAdapter{
+    private class CustomAdaptor extends BaseAdapter {
 
         private Context context;
         private ArrayList<ExpenseItem> items = new ArrayList<>();
@@ -138,19 +126,19 @@ public class ViewClaimActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             final ExpenseItem expenseItem = items.get(position);
 
-            if (convertView == null){
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
 
-                convertView = layoutInflater.inflate(R.layout.claim_lst_expenses_custom_item , null);
+                convertView = layoutInflater.inflate(R.layout.claim_lst_expenses_custom_item, null);
 
                 viewHolder.imgExpensePic = (ImageView) convertView.findViewById(R.id.imgExpensePic);
                 viewHolder.txtExpenseTitle = (TextView) convertView.findViewById(R.id.txtExpenseTitle);
                 viewHolder.txtExpenseAmount = (TextView) convertView.findViewById(R.id.txtExpenseAmount);
-                viewHolder.btnAttachExpense = (Button) convertView.findViewById(R.id.btnAttachExpense);
+                viewHolder.btnRemoveExpense = (Button) convertView.findViewById(R.id.btnAttachExpense);
 
                 convertView.setTag(viewHolder);
 
-            }else {
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
@@ -165,36 +153,77 @@ public class ViewClaimActivity extends AppCompatActivity {
             }
 
             viewHolder.txtExpenseTitle.setText(expenseItem.getExpenseName());
-            viewHolder.txtExpenseAmount.setText("Ksh. "+expenseItem.getExpenseAmount());
+            viewHolder.txtExpenseAmount.setText("Ksh. " + expenseItem.getExpenseAmount());
+
+            viewHolder.btnRemoveExpense.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeExpenseFromClaim(expenseItem);
+                }
+            });
 
             return convertView;
         }
     }
 
-    static class ViewHolder{
+    private void removeExpenseFromClaim(ExpenseItem expenseItem) {
+        String response = dbHelper.removeExpenseFromClaim(expenseItem);
+        loadClaimExpenses(expenseClaim);
+        checkData();
+        customListAdaptor.notifyDataSetChanged();
+        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+    }
+
+    static class ViewHolder {
         ImageView imgExpensePic;
         TextView txtExpenseTitle;
         TextView txtExpenseAmount;
-        Button btnAttachExpense;
+        Button btnRemoveExpense;
     }
 
-    public void loadClaimExpenses(ExpenseClaim expenseClaim){
+    public void loadClaimExpenses(ExpenseClaim expenseClaim) {
         claimExpenses.clear();
         claimExpenses.addAll(dbHelper.getClaimExpenses(expenseClaim));
     }
 
-    public void attachExpense(){
-        Intent intent = new Intent(getApplicationContext() , AttachExpenseActivity.class);
+    public void attachExpense() {
+        Intent intent = new Intent(getApplicationContext(), AttachExpenseActivity.class);
         intent.putExtra("claim", expenseClaim);
         startActivityForResult(intent, 1);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
 
-        if (customListAdaptor != null){
+            loadClaimExpenses(expenseClaim);
+
+            checkData();
+
             customListAdaptor.notifyDataSetChanged();
+        }
+    }
+
+    private void checkData() {
+
+        if (claimExpenses.isEmpty()) {
+            layoutExpenses.setVisibility(View.INVISIBLE);
+            txtNoExpenses.setVisibility(View.VISIBLE);
+
+            customListAdaptor.notifyDataSetInvalidated();
+
+        } else {
+            layoutExpenses.setVisibility(View.VISIBLE);
+            txtNoExpenses.setVisibility(View.INVISIBLE);
+
+            total = new Double(0);
+
+            for (ExpenseItem i : claimExpenses) {
+                total = total + i.getExpenseAmount();
+            }
+
+            txtTotalClaim.setText("Ksh. " + total);
         }
     }
 
@@ -202,7 +231,7 @@ public class ViewClaimActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (customListAdaptor != null){
+        if (customListAdaptor != null) {
             customListAdaptor.notifyDataSetChanged();
         }
     }

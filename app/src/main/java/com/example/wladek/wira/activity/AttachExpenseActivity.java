@@ -145,6 +145,7 @@ public class AttachExpenseActivity extends AppCompatActivity {
     private void attachExpense(ExpenseItem expenseItem , Context context) {
         String response = databaseHelper.attachExpenseToClaim(expenseItem, expenseClaim.getId());
         Toast.makeText(context , response , Toast.LENGTH_SHORT).show();
+        setResult(1);
     }
 
     static class ViewHolder{
@@ -157,12 +158,5 @@ public class AttachExpenseActivity extends AppCompatActivity {
     private void loadExpenses() {
         expenses.clear();
         expenses.addAll(databaseHelper.getExpenseItems());
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-        setResult(1);
     }
 }

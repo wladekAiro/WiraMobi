@@ -67,10 +67,10 @@ public class ClaimsFragment extends Fragment {
 
         lstClaims = (ListView) myView.findViewById(R.id.lstClaims);
 
+        loadClaims();
+
         customListAdaptor = new CustomListAdaptor(this.getActivity() , claims);
         lstClaims.setAdapter(customListAdaptor);
-
-        loadClaims();
 
         updateFragmentListView();
 
@@ -141,6 +141,13 @@ public class ClaimsFragment extends Fragment {
                 }
             });
 
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openClaim(expenseClaim);
+                }
+            });
+
             Double total = new Double(0);
 
             if (!expenseClaim.getExpenses().isEmpty()) {
@@ -150,7 +157,7 @@ public class ClaimsFragment extends Fragment {
             }
 
             viewHolder.claimTitle.setText(expenseClaim.getTitle());
-            viewHolder.txtClaimTotal.setText("Ksh "+total);
+            viewHolder.txtClaimTotal.setText("Ksh " + total);
 
             return convertView;
         }
@@ -171,12 +178,12 @@ public class ClaimsFragment extends Fragment {
 
     public void updateFragmentListView() {
         if (customListAdaptor != null) {
+            loadClaims();
             customListAdaptor.notifyDataSetChanged();
         }
     }
 
     public void openClaim(ExpenseClaim expenseClaim){
-
         Intent intent = new Intent(getActivity(), ViewClaimActivity.class);
         intent.putExtra("claim", expenseClaim);
         startActivity(intent);

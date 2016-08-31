@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -86,6 +87,14 @@ public class ExpenseFragment extends Fragment {
         customListAdaptor = new CustomListAdaptor(this.getActivity(), expenseExpenseItems);
         listView.setAdapter(customListAdaptor);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final ExpenseItem expense = expenseExpenseItems.get(position);
+                viewExpense(expense);
+            }
+        });
+
         return myView;
     }
 
@@ -158,7 +167,7 @@ public class ExpenseFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     itemPosition = position;
-                    showGalleryOptions(lstExpenseItem);
+                    viewExpense(lstExpenseItem);
                 }
             });
 
@@ -179,7 +188,7 @@ public class ExpenseFragment extends Fragment {
         TextView txtClaimAmount;
     }
 
-    private void showGalleryOptions(ExpenseItem expenseItem) {
+    private void viewExpense(ExpenseItem expenseItem) {
         Intent intent = new Intent(getActivity(), ExpenseActivity.class);
         intent.putExtra("expenseItem", expenseItem);
         startActivity(intent);
