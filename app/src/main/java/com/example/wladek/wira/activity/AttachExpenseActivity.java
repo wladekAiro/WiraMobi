@@ -2,6 +2,7 @@ package com.example.wladek.wira.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -49,13 +50,20 @@ public class AttachExpenseActivity extends AppCompatActivity {
 
         expenseClaim = (ExpenseClaim) getIntent().getSerializableExtra("claim");
 
-        if (expenseClaim != null){
+        if (expenseClaim != null) {
             actionBar.setTitle(expenseClaim.getTitle());
 
         }
 
         lstExpenses = (ListView) findViewById(R.id.expensesListView);
-        customAdaptor = new CustomAdaptor(this , expenses);
+
+        if(customAdaptor == null){
+            customAdaptor = new CustomAdaptor(this, expenses);
+        }else {
+            loadExpenses();
+            customAdaptor.notifyDataSetChanged();
+        }
+
         lstExpenses.setAdapter(customAdaptor);
     }
 
@@ -93,10 +101,10 @@ public class AttachExpenseActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             final ExpenseItem expenseItem = items.get(position);
 
-            if (convertView == null){
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
 
-                convertView = layoutInflater.inflate(R.layout.claim_lst_expenses_to_attach_custom_item , null);
+                convertView = layoutInflater.inflate(R.layout.claim_lst_expenses_to_attach_custom_item, null);
 
                 viewHolder.imgExpensePic = (ImageView) convertView.findViewById(R.id.imgExpensePic);
                 viewHolder.txtExpenseTitle = (TextView) convertView.findViewById(R.id.txtExpenseTitle);
@@ -105,7 +113,7 @@ public class AttachExpenseActivity extends AppCompatActivity {
 
                 convertView.setTag(viewHolder);
 
-            }else {
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
@@ -119,8 +127,8 @@ public class AttachExpenseActivity extends AppCompatActivity {
                         .into(viewHolder.imgExpensePic);
             }
 
-            if (expenseItem.getClaimId() != null){
-                if (expenseClaim.getId().equals(expenseItem.getClaimId())){
+            if (expenseItem.getClaimId() != null) {
+                if (expenseClaim.getId().equals(expenseItem.getClaimId())) {
                     viewHolder.checkBoxAttach.setChecked(true);
                 }
             }
@@ -143,19 +151,19 @@ public class AttachExpenseActivity extends AppCompatActivity {
         }
     }
 
-    private void removeExpense(ExpenseItem expenseItem , Context context) {
+    private void removeExpense(ExpenseItem expenseItem, Context context) {
         String response = databaseHelper.removeExpenseFromClaim(expenseItem);
-        Toast.makeText(context , response , Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
         setResult(1);
     }
 
-    private void attachExpense(ExpenseItem expenseItem , Context context) {
+    private void attachExpense(ExpenseItem expenseItem, Context context) {
         String response = databaseHelper.attachExpenseToClaim(expenseItem, expenseClaim.getId());
-        Toast.makeText(context , response , Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
         setResult(1);
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
         ImageView imgExpensePic;
         TextView txtExpenseTitle;
         TextView txtExpenseAmount;
@@ -171,5 +179,13 @@ public class AttachExpenseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadExpenses();
+        customAdaptor.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onRestoreInstanceState(savedInstanceState, persistentState);
+        loadExpenses();
+        customAdaptor.notifyDataSetChanged();
     }
 }
