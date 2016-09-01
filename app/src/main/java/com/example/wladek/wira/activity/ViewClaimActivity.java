@@ -155,12 +155,12 @@ public class ViewClaimActivity extends AppCompatActivity {
             viewHolder.txtExpenseTitle.setText(expenseItem.getExpenseName());
             viewHolder.txtExpenseAmount.setText("Ksh. " + expenseItem.getExpenseAmount());
 
-            viewHolder.btnRemoveExpense.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    removeExpenseFromClaim(expenseItem);
-                }
-            });
+//            viewHolder.btnRemoveExpense.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    removeExpenseFromClaim(expenseItem);
+//                }
+//            });
 
             return convertView;
         }
