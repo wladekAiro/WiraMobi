@@ -6,6 +6,8 @@ import android.os.PersistableBundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -57,14 +59,32 @@ public class AttachExpenseActivity extends AppCompatActivity {
 
         lstExpenses = (ListView) findViewById(R.id.expensesListView);
 
-        if(customAdaptor == null){
+        if (customAdaptor == null) {
             customAdaptor = new CustomAdaptor(this, expenses);
-        }else {
+        } else {
             loadExpenses();
             customAdaptor.notifyDataSetChanged();
         }
 
         lstExpenses.setAdapter(customAdaptor);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.shared_ok, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.okIcon:
+                onBackPressed();
+                return true;
+            default:
+                return false;
+        }
     }
 
     private class CustomAdaptor extends BaseAdapter {
