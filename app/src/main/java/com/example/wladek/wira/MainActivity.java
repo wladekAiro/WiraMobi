@@ -36,9 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     FloatingActionButton fab;
     TabLayout tabLayout;
-    private int[] tabIcons = {android.R.drawable.ic_menu_agenda, android.R.drawable.ic_menu_add,
-            android.R.drawable.ic_menu_help};
-
     final int CAMERA_REQUEST = 321;
     final int GALLERY_REQUEST = 3233;
     final int RESULT_OK = -1;
@@ -77,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+        tabLayout.getTabAt(0).setIcon(R.mipmap.expense_icon);
+        tabLayout.getTabAt(1).setIcon(R.mipmap.claim_icon);
+        tabLayout.getTabAt(2).setIcon(R.mipmap.profile_icon);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -99,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 if (tab.getPosition() == 0){
 
                     fab.setVisibility(View.VISIBLE);
+                    fab.setImageResource(android.R.drawable.ic_menu_camera);
 
                     fab.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -109,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }else if(tab.getPosition() == 1){
                     fab.setVisibility(View.VISIBLE);
+                    fab.setImageResource(R.mipmap.create_new_icon);
 
                     fab.setOnClickListener(new View.OnClickListener() {
                         @Override

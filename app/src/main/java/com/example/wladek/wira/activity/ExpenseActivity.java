@@ -24,10 +24,13 @@ import com.example.wladek.wira.pojo.ExpenseClaim;
 import com.example.wladek.wira.pojo.ExpenseItem;
 import com.example.wladek.wira.utils.DatabaseHelper;
 import com.example.wladek.wira.utils.DateDialog;
+import com.example.wladek.wira.utils.ExpenseCategory;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
 public class ExpenseActivity extends AppCompatActivity {
 
@@ -43,10 +46,15 @@ public class ExpenseActivity extends AppCompatActivity {
     ImageView imgExpensePic;
     TextView txtExpenseDate;
     Spinner spnClaims;
+    Spinner spnExpenseCategories;
 
-    SpinnerAdapter spinnerAdapter;
+    ClaimSpinnerAdapter claimSpinnerAdapter;
+    CategoriesSpinnerAdaptor categoriesSpinnerAdaptor;
 
     ArrayList<ExpenseClaim> expenseClaims = new ArrayList<>();
+
+    ArrayList<ExpenseCategory> expenseCategories =
+            new ArrayList<ExpenseCategory>(EnumSet.allOf(ExpenseCategory.class));
 
     ActionBar actionBar;
 
@@ -75,15 +83,18 @@ public class ExpenseActivity extends AppCompatActivity {
         txtExpenseDate = (TextView) findViewById(R.id.txtExpenseDate);
 
         spnClaims = (Spinner) findViewById(R.id.spnClaims);
-        spinnerAdapter = new SpinnerAdapter(this , R.layout.claims_spinner_layout , R.id.txtClaimName , expenseClaims);
-        spnClaims.setAdapter(spinnerAdapter);
+        spnExpenseCategories = (Spinner) findViewById(R.id.spnExpenseCategories);
+
+
+        claimSpinnerAdapter = new ClaimSpinnerAdapter(this , R.layout.claims_spinner_layout , R.id.txtClaimName , expenseClaims);
+        categoriesSpinnerAdaptor = new CategoriesSpinnerAdaptor(this , R.layout.support_simple_spinner_dropdown_item , expenseCategories);
+        spnClaims.setAdapter(claimSpinnerAdapter);
+        spnExpenseCategories.setAdapter(categoriesSpinnerAdaptor);
 
 
         expenseItem = (ExpenseItem) getIntent().getSerializableExtra("expenseItem");
 
         mPicasso = Picasso.with(this);
-
-        ;
 
         setValues();
 
@@ -145,7 +156,7 @@ public class ExpenseActivity extends AppCompatActivity {
     private void showDateDialog(View v) {
         DateDialog dialog = new DateDialog(v);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        dialog.show(ft , "DatePicker");
+        dialog.show(ft, "DatePicker");
     }
 
 
@@ -163,6 +174,9 @@ public class ExpenseActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Updated Date : " +txtExpenseDate.getText().toString(),
                 Toast.LENGTH_LONG).show();
+
+        onBackPressed();
+        finish();
     }
 
     public void setValues() {
@@ -185,14 +199,14 @@ public class ExpenseActivity extends AppCompatActivity {
         }
     }
 
-    class SpinnerAdapter extends ArrayAdapter<ExpenseClaim>{
+    class ClaimSpinnerAdapter extends ArrayAdapter<ExpenseClaim>{
 
         private LayoutInflater layoutInflater;
         private Context context;
         private ArrayList<ExpenseClaim> spinnerClaims = new ArrayList<>();
         int groupid;
 
-        public SpinnerAdapter(Context context, int layout , int resource, ArrayList<ExpenseClaim> spinnerClaims) {
+        public ClaimSpinnerAdapter(Context context, int layout, int resource, ArrayList<ExpenseClaim> spinnerClaims) {
             super(context, resource, spinnerClaims);
 
             this.spinnerClaims=spinnerClaims;
@@ -212,6 +226,23 @@ public class ExpenseActivity extends AppCompatActivity {
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
             return getView(position, convertView, parent);
+        }
+    }
+
+    class CategoriesSpinnerAdaptor extends ArrayAdapter<ExpenseCategory>{
+
+        public CategoriesSpinnerAdaptor(Context context, int resource, List<ExpenseCategory> objects) {
+            super(context, resource, objects);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return super.getView(position, convertView, parent);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return super.getDropDownView(position, convertView, parent);
         }
     }
 

@@ -164,6 +164,8 @@ public class ClaimsActivity extends AppCompatActivity {
             view.requestFocus();
         } else {
             saveClaim(title, description);
+            onBackPressed();
+            finish();
         }
 
     }
