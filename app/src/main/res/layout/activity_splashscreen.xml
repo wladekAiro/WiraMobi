@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/colorPrimary"
+    android:layout_gravity="center"
+    android:id="@+id/lin_lay"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="235dp"
+        android:layout_height="wrap_content"
+        android:text="WELCOME TO WIRA"
+        android:id="@+id/textView4"
+        android:textColor="#ffcddc39"
+        android:textSize="@dimen/fab_icon_size"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"/>
+
+    <ImageView
+        android:layout_width="122dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/splash"
+        android:background="@drawable/wira_logo"
+        android:layout_weight="0.09"
+        android:layout_marginTop="5dp"/>
+
+</LinearLayout>
