@@ -173,10 +173,8 @@ public class ExpenseActivity extends AppCompatActivity {
         dbHelper.save(expenseItem);
 
         Toast.makeText(this, "Updated Date : " +txtExpenseDate.getText().toString(),
-                Toast.LENGTH_LONG).show();
-
+                Toast.LENGTH_SHORT).show();
         onBackPressed();
-        finish();
     }
 
     public void setValues() {

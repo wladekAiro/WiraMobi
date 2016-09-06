@@ -13,6 +13,7 @@ public class ExpenseItem implements Serializable {
     private Double expenseAmount;
     private String imagePath;
     private Long claimId;
+    private ExpenseClaim claim;
 
 
     public ExpenseItem(){
@@ -84,5 +85,13 @@ public class ExpenseItem implements Serializable {
         }
 
         return false;
+    }
+
+    public ExpenseClaim getClaim() {
+        return claim;
+    }
+
+    public void setClaim(ExpenseClaim claim) {
+        this.claim = claim;
     }
 }

@@ -1,14 +1,11 @@
 package com.example.wladek.wira.fragments.tab_fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +25,10 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by wladek on 8/9/16.
@@ -51,6 +51,7 @@ public class ExpenseFragment extends Fragment {
     ArrayList<ExpenseItem> expenseExpenseItems = new ArrayList<>();
 
     CustomListAdaptor customListAdaptor;
+    private DatabaseHelper helper;
 
     int itemPosition;
 
@@ -70,6 +71,7 @@ public class ExpenseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        helper = new DatabaseHelper(getActivity());
         loadExpenses();
     }
 
@@ -82,7 +84,7 @@ public class ExpenseFragment extends Fragment {
 
         listView = (ListView) myView.findViewById(R.id.lstExpenses);
 
-        Log.e(TAG+" liST SIZE +++ ", " " + expenseExpenseItems.size());
+        Log.e(TAG + " liST SIZE +++ ", " " + expenseExpenseItems.size());
 
         customListAdaptor = new CustomListAdaptor(this.getActivity(), expenseExpenseItems);
         listView.setAdapter(customListAdaptor);
@@ -106,6 +108,9 @@ public class ExpenseFragment extends Fragment {
         ViewHolder viewHolder;
         Context context;
         Picasso mPicasso;
+
+        SimpleDateFormat firstFormatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat secondFormatter = new SimpleDateFormat("MMM dd");
 
         public CustomListAdaptor(Context context, ArrayList<ExpenseItem> expenseExpenseItems) {
             layoutInflater = LayoutInflater.from(context);
@@ -150,8 +155,21 @@ public class ExpenseFragment extends Fragment {
             }
 
             viewHolder.txtClaimTitle.setText(lstExpenseItem.getExpenseName());
-            viewHolder.txtClaimAmount.setText(lstExpenseItem.getExpenseAmount()+"");
-            viewHolder.txtClaimDate.setText(lstExpenseItem.getExpenseDate());
+            viewHolder.txtClaimAmount.setText(lstExpenseItem.getExpenseAmount() + "");
+
+            Date date = new Date();
+
+            if (lstExpenseItem.getExpenseDate() != null) {
+                try {
+                    date = firstFormatter.parse(lstExpenseItem.getExpenseDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            String dateString = secondFormatter.format(date);
+
+            viewHolder.txtClaimDate.setText(dateString);
 
             if (lstExpenseItem.getImagePath() != null) {
 
@@ -251,43 +269,58 @@ public class ExpenseFragment extends Fragment {
         this.expenseExpenseItems = expenseExpenseItems;
     }
 
-    public void loadExpenses(){
+    public void loadExpenses() {
         expenseExpenseItems.clear();
-        LoadExpensesTask task = (LoadExpensesTask) new LoadExpensesTask().execute();
+        expenseExpenseItems.addAll(helper.getExpenseItems());
+//        LoadExpensesTask task = (LoadExpensesTask) new LoadExpensesTask().execute();
     }
 
-    public class LoadExpensesTask extends AsyncTask<DatabaseHelper , Void , Void>{
-
-        protected ProgressDialog mProgressDialog;
-        private DatabaseHelper helper;
-
-        @Override
-        protected Void doInBackground(DatabaseHelper... params) {
-            helper = new DatabaseHelper(getActivity());
-            expenseExpenseItems.addAll(helper.getExpenseItems());
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setMessage("Please wait...");
-            mProgressDialog.getWindow().setGravity(Gravity.CENTER);
-            mProgressDialog.show();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            mProgressDialog.dismiss();
-        }
-    }
+//    public class LoadExpensesTask extends AsyncTask<DatabaseHelper, Void, Void> {
+//
+//        protected ProgressDialog mProgressDialog;
+//        private DatabaseHelper helper;
+//
+//        @Override
+//        protected Void doInBackground(DatabaseHelper... params) {
+//            helper = new DatabaseHelper(getActivity());
+//            expenseExpenseItems.addAll(helper.getExpenseItems());
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            mProgressDialog = new ProgressDialog(getActivity());
+//            mProgressDialog.setCancelable(false);
+//            mProgressDialog.setMessage("Please wait...");
+//            mProgressDialog.getWindow().setGravity(Gravity.CENTER);
+//            mProgressDialog.show();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            mProgressDialog.dismiss();
+//        }
+//    }
 
     public ArrayList<ExpenseItem> getExpenseExpenseItems() {
         return expenseExpenseItems;
     }
 
     public void updateFragment1ListView() {
+        if (customListAdaptor != null) {
+            customListAdaptor.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadExpenses();
         if (customListAdaptor != null) {
             customListAdaptor.notifyDataSetChanged();
         }

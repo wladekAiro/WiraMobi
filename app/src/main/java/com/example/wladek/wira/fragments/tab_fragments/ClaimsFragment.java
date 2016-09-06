@@ -188,4 +188,15 @@ public class ClaimsFragment extends Fragment {
         intent.putExtra("claim", expenseClaim);
         startActivity(intent);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateFragmentListView();
+    }
 }
