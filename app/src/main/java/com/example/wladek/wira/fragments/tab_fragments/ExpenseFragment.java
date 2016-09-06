@@ -2,6 +2,7 @@ package com.example.wladek.wira.fragments.tab_fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -52,6 +53,8 @@ public class ExpenseFragment extends Fragment {
 
     CustomListAdaptor customListAdaptor;
     private DatabaseHelper helper;
+    Typeface regularTf;
+    Typeface boldTf;
 
     int itemPosition;
 
@@ -97,6 +100,9 @@ public class ExpenseFragment extends Fragment {
             }
         });
 
+        regularTf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/regular_serif.ttf");
+        boldTf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bold_serif.ttf");
+
         return myView;
     }
 
@@ -117,6 +123,8 @@ public class ExpenseFragment extends Fragment {
             this.itemsList = expenseExpenseItems;
             this.context = context;
             this.mPicasso = Picasso.with(context);
+
+
         }
 
         @Override
@@ -143,10 +151,11 @@ public class ExpenseFragment extends Fragment {
                 convertView = layoutInflater.inflate(R.layout.list_view_item_layout, null);
 
                 viewHolder = new ViewHolder();
-                viewHolder.txtClaimTitle = (TextView) convertView.findViewById(R.id.txtClaimTitle);
-                viewHolder.txtClaimAmount = (TextView) convertView.findViewById(R.id.txtClaimAmount);
-                viewHolder.txtClaimDate = (TextView) convertView.findViewById(R.id.txtClaimDate);
+                viewHolder.txtExpenseTitle = (TextView) convertView.findViewById(R.id.txtExpenseTitle);
+                viewHolder.txtExpenseAmount = (TextView) convertView.findViewById(R.id.txtExpenseAmount);
+                viewHolder.txtExpenseDate = (TextView) convertView.findViewById(R.id.txtExpenseDate);
                 viewHolder.imgItemView = (ImageView) convertView.findViewById(R.id.imgItemView);
+                viewHolder.txtclaimTitle = (TextView) convertView.findViewById(R.id.txtClaimTitle);
 
                 convertView.setTag(viewHolder);
 
@@ -154,8 +163,8 @@ public class ExpenseFragment extends Fragment {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            viewHolder.txtClaimTitle.setText(lstExpenseItem.getExpenseName());
-            viewHolder.txtClaimAmount.setText(lstExpenseItem.getExpenseAmount() + "");
+            viewHolder.txtExpenseTitle.setText(lstExpenseItem.getExpenseName());
+            viewHolder.txtExpenseAmount.setText(lstExpenseItem.getExpenseAmount() + "0");
 
             Date date = new Date();
 
@@ -169,7 +178,7 @@ public class ExpenseFragment extends Fragment {
 
             String dateString = secondFormatter.format(date);
 
-            viewHolder.txtClaimDate.setText(dateString);
+            viewHolder.txtExpenseDate.setText(dateString);
 
             if (lstExpenseItem.getImagePath() != null) {
 
@@ -189,6 +198,11 @@ public class ExpenseFragment extends Fragment {
                 }
             });
 
+            viewHolder.txtclaimTitle.setTypeface(regularTf);
+            viewHolder.txtExpenseTitle.setTypeface(regularTf);
+            viewHolder.txtExpenseAmount.setTypeface(regularTf);
+            viewHolder.txtExpenseDate.setTypeface(regularTf);
+
             return convertView;
         }
 
@@ -201,9 +215,10 @@ public class ExpenseFragment extends Fragment {
 
     static class ViewHolder {
         ImageView imgItemView;
-        TextView txtClaimTitle;
-        TextView txtClaimDate;
-        TextView txtClaimAmount;
+        TextView txtExpenseTitle;
+        TextView txtExpenseDate;
+        TextView txtExpenseAmount;
+        TextView txtclaimTitle;
     }
 
     private void viewExpense(ExpenseItem expenseItem) {

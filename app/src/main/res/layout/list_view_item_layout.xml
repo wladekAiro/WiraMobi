@@ -27,11 +27,21 @@
             <TextView
                 android:layout_width="136dp"
                 android:layout_height="wrap_content"
-                android:text="Lunch"
+                android:text="Claim"
                 android:id="@+id/txtClaimTitle"
                 android:layout_weight="0.03"
-                android:textSize="15dp"
-                android:layout_marginLeft="5dp"/>
+                android:textSize="12dp"
+                android:layout_marginLeft="10dp"/>
+
+            <TextView
+                android:layout_width="136dp"
+                android:layout_height="wrap_content"
+                android:text="Lunch"
+                android:id="@+id/txtExpenseTitle"
+                android:layout_weight="0.03"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -41,19 +51,19 @@
             android:layout_marginTop="15dp">
 
             <TextView
-                android:layout_width="130dp"
+                android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:text="Aug 9, 2016"
-                android:id="@+id/txtClaimDate"
-                android:textSize="15dp"
+                android:text="date"
+                android:id="@+id/txtExpenseDate"
+                android:textSize="12dp"
                 android:gravity="right"/>
 
             <TextView
-                android:layout_width="130dp"
+                android:layout_width="110dp"
                 android:layout_height="match_parent"
                 android:text="Ksh 250"
-                android:id="@+id/txtClaimAmount"
-                android:textSize="15dp"
+                android:id="@+id/txtExpenseAmount"
+                android:textSize="22dp"
                 android:layout_marginTop="5dp"
                 android:gravity="right"/>
         </LinearLayout>
