@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     final int CAMERA_REQUEST = 321;
     final int GALLERY_REQUEST = 3233;
-    final int QRCODE_REQUEST = 3233;
+    final int QRCODE_REQUEST = 567;
 
     CameraPhoto cameraPhoto;
     GalleryPhoto galleryPhoto;
@@ -52,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
     DatabaseHelper myDb;
 
-    ActionBar actionBar;
+//    ActionBar actionBar;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
         myDb = new DatabaseHelper(this);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Wira");
+        toolbar.setTitle("Expenses");
 
-        actionBar = getSupportActionBar();
+//        actionBar = getSupportActionBar();
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
 
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(tab.getPosition());
 
                 if (tab.getPosition() == 0){
-
+                    toolbar.setTitle("Expenses");
                     fab.setVisibility(View.VISIBLE);
                     fab.setImageResource(android.R.drawable.ic_menu_camera);
 
@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                 }else if(tab.getPosition() == 1){
+                    toolbar.setTitle("Claims");
                     fab.setVisibility(View.VISIBLE);
                     fab.setImageResource(R.mipmap.create_new_icon);
 
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                 }else {
+                    toolbar.setTitle("Profile");
                     fab.setVisibility(View.INVISIBLE);
                 }
             }
