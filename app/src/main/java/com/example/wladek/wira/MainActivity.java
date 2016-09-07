@@ -26,6 +26,7 @@ import com.example.wladek.wira.fragments.tab_fragments.ProfileFragment;
 import com.example.wladek.wira.pager_adapters.ViewPagerAdapter;
 import com.example.wladek.wira.pojo.ExpenseItem;
 import com.example.wladek.wira.utils.DatabaseHelper;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.kosalgeek.android.photoutil.CameraPhoto;
 import com.kosalgeek.android.photoutil.GalleryPhoto;
 
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onTabSelected(tab);
                 viewPager.setCurrentItem(tab.getPosition());
 
-                if (tab.getPosition() == 0){
+                if (tab.getPosition() == 0) {
                     toolbar.setTitle("Expenses");
                     fab.setVisibility(View.VISIBLE);
                     fab.setImageResource(android.R.drawable.ic_menu_camera);
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                }else if(tab.getPosition() == 1){
+                } else if (tab.getPosition() == 1) {
                     toolbar.setTitle("Claims");
                     fab.setVisibility(View.VISIBLE);
                     fab.setImageResource(R.mipmap.create_new_icon);
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                }else {
+                } else {
                     toolbar.setTitle("Profile");
                     fab.setVisibility(View.INVISIBLE);
                 }
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onTabUnselected(tab);
                 viewPager.setCurrentItem(tab.getPosition());
 
-                if (tab.getPosition() == 0){
+                if (tab.getPosition() == 0) {
 
                     fab.setVisibility(View.VISIBLE);
 
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                }else if(tab.getPosition() == 1){
+                } else if (tab.getPosition() == 1) {
                     fab.setVisibility(View.VISIBLE);
 
                     fab.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                }else {
+                } else {
                     fab.setVisibility(View.INVISIBLE);
                 }
             }
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onTabReselected(tab);
                 viewPager.setCurrentItem(tab.getPosition());
 
-                if (tab.getPosition() == 0){
+                if (tab.getPosition() == 0) {
 
                     fab.setVisibility(View.VISIBLE);
 
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                }else if(tab.getPosition() == 1){
+                } else if (tab.getPosition() == 1) {
                     fab.setVisibility(View.VISIBLE);
 
                     fab.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                }else {
+                } else {
                     fab.setVisibility(View.INVISIBLE);
                 }
             }
@@ -311,6 +312,15 @@ public class MainActivity extends AppCompatActivity {
                 galleryPhoto.setPhotoUri(uri);
                 photoPath = galleryPhoto.getPath();
                 updateExpense(photoPath);
+            }
+        }else if (resultCode == CommonStatusCodes.SUCCESS){
+            if (requestCode == QRCODE_REQUEST){
+                if (data != null){
+                    String barcode = data.getStringExtra("qrCode");
+                    Toast.makeText(MainActivity.this , "Data : "+barcode , Toast.LENGTH_LONG).show();
+                }else {
+                    Toast.makeText(MainActivity.this , "No data received from scanner" , Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
