@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.wladek.wira.activity.BarCodeActivity;
 import com.example.wladek.wira.activity.ClaimsActivity;
 import com.example.wladek.wira.fragments.tab_fragments.ClaimsFragment;
 import com.example.wladek.wira.fragments.tab_fragments.ExpenseFragment;
@@ -234,6 +235,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_qrCode) {
+            Intent intent = new Intent(MainActivity.this , BarCodeActivity.class);
+            startActivityForResult(intent , QRCODE_REQUEST);
             return true;
         }
 
