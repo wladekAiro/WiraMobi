@@ -1,5 +1,6 @@
 package com.example.wladek.wira;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     final int CAMERA_REQUEST = 321;
     final int GALLERY_REQUEST = 3233;
-    final int RESULT_OK = -1;
+    final int QRCODE_REQUEST = 3233;
 
     CameraPhoto cameraPhoto;
     GalleryPhoto galleryPhoto;
@@ -230,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_qrCode) {
             return true;
         }
 
@@ -295,9 +296,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String photoPath = null;
 
-        if (resultCode == RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA_REQUEST) {
-
                 photoPath = cameraPhoto.getPhotoPath();
                 updateExpense(photoPath);
 

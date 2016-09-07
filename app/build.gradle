@@ -6,6 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.wladek.wira"
+        multiDexEnabled true
         generatedDensities = []
         minSdkVersion 10
         targetSdkVersion 23
@@ -37,8 +38,8 @@ dependencies {
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.google.android.gms:play-services-appindexing:9.4.0'
     compile 'com.android.volley:volley:1.0.0'
+    compile 'com.google.android.gms:play-services:7.8.0'
 }
 
 afterEvaluate {
