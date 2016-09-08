@@ -141,8 +141,8 @@ public class AttachExpenseActivity extends AppCompatActivity {
 
                 mPicasso
                         .load(new File(expenseItem.getImagePath()))
-                        .placeholder(R.mipmap.doument_text_icon)
-                        .error(R.mipmap.doument_text_icon)
+                        .placeholder(R.mipmap.document_icon)
+                        .error(R.mipmap.document_icon)
                         .resize(150, 100)
                         .into(viewHolder.imgExpensePic);
             }

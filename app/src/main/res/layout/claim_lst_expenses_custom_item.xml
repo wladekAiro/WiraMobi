@@ -14,7 +14,7 @@
             android:layout_height="80dp"
             android:layout_marginTop="10dp"
             android:id="@+id/imgExpensePic"
-            android:src="@mipmap/doument_text_icon" />
+            android:src="@mipmap/document_icon" />
 
         <LinearLayout
             android:orientation="vertical"

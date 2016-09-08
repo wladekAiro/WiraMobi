@@ -10,11 +10,11 @@
         android:layout_height="70dp">
 
         <ImageView
-            android:layout_width="90dp"
-            android:layout_height="50dp"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:id="@+id/imgIconView"
-            android:src="@mipmap/doument_text_icon" />
+            android:src="@mipmap/document_icon" />
 
         <LinearLayout
             android:orientation="vertical"

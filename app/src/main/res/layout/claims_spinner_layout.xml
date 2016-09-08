@@ -3,12 +3,6 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
-        android:padding="5dp"
-        android:src="@mipmap/doument_text_icon"/>
     <TextView
         android:id="@+id/txtClaimName"
         android:layout_width="wrap_content"

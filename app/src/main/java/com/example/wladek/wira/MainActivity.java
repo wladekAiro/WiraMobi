@@ -77,9 +77,10 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setIcon(R.mipmap.expense_icon);
-        tabLayout.getTabAt(1).setIcon(R.mipmap.claim_icon);
-        tabLayout.getTabAt(2).setIcon(R.mipmap.profile_icon);
+        tabLayout.getTabAt(0).setIcon(R.mipmap.receipt_icon);
+        tabLayout.getTabAt(0).setIcon(R.mipmap.receipt_icon);
+        tabLayout.getTabAt(1).setIcon(R.mipmap.report_icon);
+        tabLayout.getTabAt(2).setIcon(R.mipmap.contact_icon);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 

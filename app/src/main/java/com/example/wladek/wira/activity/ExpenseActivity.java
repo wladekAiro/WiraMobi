@@ -44,7 +44,7 @@ public class ExpenseActivity extends AppCompatActivity {
     EditText editTextExpenseAmount;
     ExpenseItem expenseItem;
     ImageView imgExpensePic;
-    TextView txtExpenseDate;
+    EditText txtExpenseDate;
     Spinner spnClaims;
     Spinner spnExpenseCategories;
 
@@ -80,7 +80,7 @@ public class ExpenseActivity extends AppCompatActivity {
         editTextExpenseName = (EditText) findViewById(R.id.editTextDescription);
         editTextExpenseAmount = (EditText) findViewById(R.id.editTextAmount);
         imgExpensePic = (ImageView) findViewById(R.id.imgExpensePic);
-        txtExpenseDate = (TextView) findViewById(R.id.txtExpenseDate);
+        txtExpenseDate = (EditText) findViewById(R.id.txtExpenseDate);
 
         spnClaims = (Spinner) findViewById(R.id.spnClaims);
         spnExpenseCategories = (Spinner) findViewById(R.id.spnExpenseCategories);

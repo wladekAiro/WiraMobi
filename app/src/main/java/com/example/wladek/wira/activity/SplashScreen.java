@@ -16,7 +16,7 @@ import com.example.wladek.wira.R;
 /**
  * Created by wladek on 9/5/16.
  */
-public class Splashscreen extends Activity {
+public class SplashScreen extends Activity {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         Window window = getWindow();
@@ -50,18 +50,18 @@ public class Splashscreen extends Activity {
                     int waited = 0;
                     // Splash screen pause time
                     while (waited < 3500) {
-                        sleep(150);
+                        sleep(100);
                         waited += 100;
                     }
-                    Intent intent = new Intent(Splashscreen.this,
+                    Intent intent = new Intent(SplashScreen.this,
                             MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
-                    Splashscreen.this.finish();
+                    SplashScreen.this.finish();
                 } catch (InterruptedException e) {
                     // do nothing
                 } finally {
-                    Splashscreen.this.finish();
+                    SplashScreen.this.finish();
                 }
 
             }
