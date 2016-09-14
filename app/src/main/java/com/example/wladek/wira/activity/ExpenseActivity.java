@@ -1,22 +1,17 @@
 package com.example.wladek.wira.activity;
 
 import android.app.FragmentTransaction;
-import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wladek.wira.R;
@@ -30,7 +25,6 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 
 public class ExpenseActivity extends AppCompatActivity {
 
@@ -45,12 +39,9 @@ public class ExpenseActivity extends AppCompatActivity {
     ExpenseItem expenseItem;
     ImageView imgExpensePic;
     EditText txtExpenseDate;
-    Spinner spnClaims;
-    Spinner spnExpenseCategories;
 
-    ClaimSpinnerAdapter claimSpinnerAdapter;
-    CategoriesSpinnerAdaptor categoriesSpinnerAdaptor;
-
+    EditText editClaimTitle;
+    EditText editCategory;
     ArrayList<ExpenseClaim> expenseClaims = new ArrayList<>();
 
     ArrayList<ExpenseCategory> expenseCategories =
@@ -61,6 +52,8 @@ public class ExpenseActivity extends AppCompatActivity {
     Picasso mPicasso;
 
     DatabaseHelper dbHelper;
+
+    Typeface boldTf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,15 +75,8 @@ public class ExpenseActivity extends AppCompatActivity {
         imgExpensePic = (ImageView) findViewById(R.id.imgExpensePic);
         txtExpenseDate = (EditText) findViewById(R.id.txtExpenseDate);
 
-        spnClaims = (Spinner) findViewById(R.id.spnClaims);
-        spnExpenseCategories = (Spinner) findViewById(R.id.spnExpenseCategories);
-
-
-        claimSpinnerAdapter = new ClaimSpinnerAdapter(this , R.layout.claims_spinner_layout , R.id.txtClaimName , expenseClaims);
-        categoriesSpinnerAdaptor = new CategoriesSpinnerAdaptor(this , R.layout.support_simple_spinner_dropdown_item , expenseCategories);
-        spnClaims.setAdapter(claimSpinnerAdapter);
-        spnExpenseCategories.setAdapter(categoriesSpinnerAdaptor);
-
+        editClaimTitle = (EditText) findViewById(R.id.editClaimTitle);
+        editCategory = (EditText) findViewById(R.id.editCategory);
 
         expenseItem = (ExpenseItem) getIntent().getSerializableExtra("expenseItem");
 
@@ -105,24 +91,38 @@ public class ExpenseActivity extends AppCompatActivity {
             }
         });
 
-        if(expenseItem.getClaimId() != null){
-            spnClaims.setSelection(expenseItem.getClaimId().intValue());
-        }
+        boldTf = Typeface.createFromAsset(this.getAssets(), "fonts/regular_bold_droid_serif.ttf");
+        editClaimTitle.setTypeface(boldTf);
+        editCategory.setTypeface(boldTf);
+        editTextExpenseName.setTypeface(boldTf);
+        editTextExpenseAmount.setTypeface(boldTf);
+        txtExpenseDate.setTypeface(boldTf);
 
-        spnClaims.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        editClaimTitle.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ExpenseClaim claim = expenseClaims.get(position);
-                if (claim.getId() == null){
-                    return;
-                }else {
-                    expenseItem.setClaimId(claim.getId());
+            public void onClick(View v) {
+
+                try {
+                    Intent intent = new Intent(ExpenseActivity.this, AttachClaimActivity.class);
+                    intent.putExtra("expense", expenseItem);
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
+        });
 
+        editCategory.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onClick(View v) {
 
+                try {
+                    Intent intent = new Intent(ExpenseActivity.this, AttachCategoryActivity.class);
+                    intent.putExtra("expense", expenseItem);
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -191,57 +191,15 @@ public class ExpenseActivity extends AppCompatActivity {
             mPicasso
                     .load(new File(expenseItem.getImagePath()))
                     .placeholder(R.drawable.ic_launcher)
-                    .error(R.drawable.error_circle)
+                    .error(R.mipmap.ic_launcher)
                     .resize(250, 250)
                     .into(imgExpensePic);
         }
+
+        editClaimTitle.setTypeface(boldTf);
+        editCategory.setTypeface(boldTf);
+        editTextExpenseName.setTypeface(boldTf);
+        editTextExpenseAmount.setTypeface(boldTf);
+        txtExpenseDate.setTypeface(boldTf);
     }
-
-    class ClaimSpinnerAdapter extends ArrayAdapter<ExpenseClaim>{
-
-        private LayoutInflater layoutInflater;
-        private Context context;
-        private ArrayList<ExpenseClaim> spinnerClaims = new ArrayList<>();
-        int groupid;
-
-        public ClaimSpinnerAdapter(Context context, int layout, int resource, ArrayList<ExpenseClaim> spinnerClaims) {
-            super(context, resource, spinnerClaims);
-
-            this.spinnerClaims=spinnerClaims;
-            layoutInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            this.groupid=layout;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            View itemView=layoutInflater.inflate(groupid,parent,false);
-            TextView textView=(TextView)itemView.findViewById(R.id.txtClaimName);
-            textView.setText(spinnerClaims.get(position).getTitle());
-            return itemView;
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            return getView(position, convertView, parent);
-        }
-    }
-
-    class CategoriesSpinnerAdaptor extends ArrayAdapter<ExpenseCategory>{
-
-        public CategoriesSpinnerAdaptor(Context context, int resource, List<ExpenseCategory> objects) {
-            super(context, resource, objects);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            return super.getView(position, convertView, parent);
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            return super.getDropDownView(position, convertView, parent);
-        }
-    }
-
 }

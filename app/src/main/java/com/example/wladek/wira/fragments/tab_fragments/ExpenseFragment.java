@@ -100,7 +100,7 @@ public class ExpenseFragment extends Fragment {
             }
         });
 
-        regularTf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/regular_serif.ttf");
+        regularTf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/regular_droid_serif.ttf");
         boldTf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bold_serif.ttf");
 
         return myView;
@@ -166,6 +166,12 @@ public class ExpenseFragment extends Fragment {
             viewHolder.txtExpenseTitle.setText(lstExpenseItem.getExpenseName());
             viewHolder.txtExpenseAmount.setText(lstExpenseItem.getExpenseAmount() + "0");
 
+            if (lstExpenseItem.getClaim() != null){
+                viewHolder.txtclaimTitle.setText(lstExpenseItem.getClaim().getTitle());
+            }else {
+                viewHolder.txtclaimTitle.setText("");
+            }
+
             Date date = new Date();
 
             if (lstExpenseItem.getExpenseDate() != null) {
@@ -185,7 +191,7 @@ public class ExpenseFragment extends Fragment {
                 mPicasso
                         .load(new File(lstExpenseItem.getImagePath()))
                         .placeholder(R.drawable.ic_launcher)
-                        .error(R.drawable.error_circle)
+                        .error(R.mipmap.ic_launcher)
                         .resize(250, 200)
                         .into(viewHolder.imgItemView);
             }
@@ -198,10 +204,11 @@ public class ExpenseFragment extends Fragment {
                 }
             });
 
-            viewHolder.txtclaimTitle.setTypeface(regularTf);
+
             viewHolder.txtExpenseTitle.setTypeface(regularTf);
             viewHolder.txtExpenseAmount.setTypeface(regularTf);
             viewHolder.txtExpenseDate.setTypeface(regularTf);
+            viewHolder.txtclaimTitle.setTypeface(regularTf);
 
             return convertView;
         }

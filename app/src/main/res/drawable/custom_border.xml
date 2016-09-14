@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <corners android:radius="10dp"/>
-    <padding android:left="10dp" android:right="10dp" android:top="10dp" android:bottom="10dp"/>
-    <stroke android:color="#F3412150"/>
+    <!-- Define back ground color -->
+    <solid android:color="#2000eEFF" />
+
+    <!-- Define border color and thicknes -->
+    <stroke android:width="1dp"
+        android:color="#2A009A00"/>
 </shape>

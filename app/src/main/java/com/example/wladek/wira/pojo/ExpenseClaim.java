@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class ExpenseClaim implements Serializable{
     private Long id;
     private String title;
-    private String description;
     private ArrayList<ExpenseItem> expenses = new ArrayList<>();
     private Double totalAmount;
 
@@ -23,14 +22,6 @@ public class ExpenseClaim implements Serializable{
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public ArrayList<ExpenseItem> getExpenses() {

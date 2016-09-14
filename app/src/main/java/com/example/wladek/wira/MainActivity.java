@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +25,7 @@ import com.example.wladek.wira.fragments.tab_fragments.ProfileFragment;
 import com.example.wladek.wira.pager_adapters.ViewPagerAdapter;
 import com.example.wladek.wira.pojo.ExpenseItem;
 import com.example.wladek.wira.utils.DatabaseHelper;
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.kosalgeek.android.photoutil.CameraPhoto;
 import com.kosalgeek.android.photoutil.GalleryPhoto;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
-    FloatingActionButton fab;
+    AddFloatingActionButton fab;
     TabLayout tabLayout;
     final int CAMERA_REQUEST = 321;
     final int GALLERY_REQUEST = 3233;
@@ -78,11 +78,10 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setIcon(R.mipmap.receipt_icon);
-        tabLayout.getTabAt(0).setIcon(R.mipmap.receipt_icon);
         tabLayout.getTabAt(1).setIcon(R.mipmap.report_icon);
         tabLayout.getTabAt(2).setIcon(R.mipmap.contact_icon);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (AddFloatingActionButton) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 showGalleryOptions();
             }
         });
+        fab.setPlusColor(R.color.blue_btn_bg_color);
 
         tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
             @Override

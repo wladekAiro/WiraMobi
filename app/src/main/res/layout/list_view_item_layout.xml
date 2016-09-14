@@ -6,22 +6,24 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="80dp"
+        android:background="#FFFFFFFF">
 
         <ImageView
-            android:layout_width="75dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="75dp"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="5dp"
             android:id="@+id/imgItemView"
-            android:src="@mipmap/lady_bird" />
+            android:src="@mipmap/ic_launcher" />
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="152dp"
             android:layout_height="50dp"
             android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
             android:weightSum="1">
 
             <TextView
@@ -30,8 +32,7 @@
                 android:text="Claim"
                 android:id="@+id/txtClaimTitle"
                 android:layout_weight="0.03"
-                android:textSize="12dp"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="5dp"/>
 
             <TextView
                 android:layout_width="136dp"
@@ -39,9 +40,10 @@
                 android:text="Lunch"
                 android:id="@+id/txtExpenseTitle"
                 android:layout_weight="0.03"
-                android:textSize="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:fontFamily="sans-serif-condensed"/>
         </LinearLayout>
 
         <LinearLayout
@@ -55,17 +57,18 @@
                 android:layout_height="wrap_content"
                 android:text="date"
                 android:id="@+id/txtExpenseDate"
-                android:textSize="12dp"
-                android:gravity="right"/>
+                android:gravity="right"
+                android:layout_marginRight="10dp"/>
 
             <TextView
                 android:layout_width="110dp"
                 android:layout_height="match_parent"
                 android:text="Ksh 250"
                 android:id="@+id/txtExpenseAmount"
-                android:textSize="22dp"
                 android:layout_marginTop="5dp"
-                android:gravity="right"/>
+                android:gravity="right"
+                android:textSize="17dp"
+                android:fontFamily="sans-serif-condensed"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

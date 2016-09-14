@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="#471FDCB2">
 
     <!--<TableRow-->
         <!--android:layout_width="match_parent"-->
@@ -20,5 +21,5 @@
         android:listSelector="@drawable/list_selector"
         android:fadingEdgeLength="50dp"
         android:layout_weight="1"
-        android:layout_marginTop="70dp"/>
+        android:layout_marginTop="63dp"/>
 </LinearLayout>

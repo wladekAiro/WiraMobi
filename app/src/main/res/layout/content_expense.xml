@@ -29,7 +29,8 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="top">
+                android:layout_gravity="top"
+                android:background="@drawable/custom_border">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -69,7 +70,8 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@drawable/custom_border">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -100,7 +102,8 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@drawable/custom_border">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -129,63 +132,59 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="match_parent"
+                android:background="@drawable/custom_border">
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Select category"
-                        android:id="@+id/txtCategory"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginLeft="7dp"
-                        android:layout_alignLeft="@+id/spnExpenseCategories"
-                        android:layout_weight="0.1"/>
-
-                    <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/spnExpenseCategories"
                         android:layout_marginTop="5dp"
-                        android:layout_marginLeft="20dp"
-                        android:spinnerMode="dropdown"
-                        android:dropDownWidth="wrap_content"
-                        android:layout_alignRight="@+id/txtCategory"
-                        android:layout_weight="0.5"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Category"
+                        android:layout_margin="5dp"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Select category"
+                        android:id="@+id/editCategory"
+                        android:layout_margin="5dp"
+                        android:editable="false"/>
                 </LinearLayout>
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="match_parent"
+                android:background="@drawable/custom_border">
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Select claim"
-                        android:id="@+id/textView2"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginLeft="7dp"
-                        android:layout_weight="0.1"/>
-
-                    <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/spnClaims"
-                        android:layout_marginLeft="40dp"
-                        android:layout_weight="0.5"/>
+                        android:layout_marginTop="5dp"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Claim"
+                        android:layout_margin="5dp"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Select claim"
+                        android:id="@+id/editClaimTitle"
+                        android:layout_margin="5dp"
+                        android:editable="false"/>
                 </LinearLayout>
             </TableRow>
         </LinearLayout>
     </ScrollView>
-
 </RelativeLayout>

@@ -28,8 +28,6 @@ import java.util.ArrayList;
 public class ClaimsFragment extends Fragment {
 
     private static final String ARG_EXAMPLE = "This is an expense argument";
-    private String example_data="";
-
     public ClaimsFragment(){
 
     }

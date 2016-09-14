@@ -16,7 +16,7 @@ import com.example.wladek.wira.R;
 import com.example.wladek.wira.pojo.ExpenseClaim;
 import com.example.wladek.wira.pojo.ExpenseItem;
 import com.example.wladek.wira.utils.DatabaseHelper;
-import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,13 +30,12 @@ public class ClaimsActivity extends AppCompatActivity {
     DatabaseHelper myDb;
 
     EditText editTextClaimTitle;
-    EditText editTextDescription;
     ExpenseClaim expenseClaim;
 
     MaterialDialog.Builder builder;
     MaterialDialog dialog;
 
-    FloatingActionButton fabAttachExpense;
+    AddFloatingActionButton fabAttachExpense;
 
     ArrayList<ExpenseItem> expenseItems = new ArrayList<>();
     Set<ExpenseItem> claimExpenses = new HashSet<>();
@@ -59,9 +58,7 @@ public class ClaimsActivity extends AppCompatActivity {
         actionBar.setTitle("New Claim");
 
         editTextClaimTitle = (EditText) findViewById(R.id.editTextClaimTitle);
-        editTextDescription = (EditText) findViewById(R.id.editTextDescription);
-
-        fabAttachExpense = (FloatingActionButton) findViewById(R.id.fbAddExpense);
+        fabAttachExpense = (AddFloatingActionButton) findViewById(R.id.fbAddExpense);
         fabAttachExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,16 +139,8 @@ public class ClaimsActivity extends AppCompatActivity {
 
     private void saveClaim() {
         String title = editTextClaimTitle.getText().toString();
-        String description = editTextDescription.getText().toString();
-
         boolean invalid = false;
         View view = null;
-
-        if (TextUtils.isEmpty(description)) {
-            editTextDescription.setError("This field is required");
-            invalid = true;
-            view = editTextDescription;
-        }
 
         if (TextUtils.isEmpty(title)) {
             editTextClaimTitle.setError("This field is required");
@@ -163,16 +152,15 @@ public class ClaimsActivity extends AppCompatActivity {
         if (invalid) {
             view.requestFocus();
         } else {
-            saveClaim(title, description);
+            saveClaim(title);
             onBackPressed();
             finish();
         }
 
     }
 
-    private void saveClaim(String title, String description) {
+    private void saveClaim(String title) {
         expenseClaim.setTitle(title);
-        expenseClaim.setDescription(description);
         expenseClaim.setTotalAmount(new Double(0));
 
         String response = myDb.createClaim(expenseClaim);

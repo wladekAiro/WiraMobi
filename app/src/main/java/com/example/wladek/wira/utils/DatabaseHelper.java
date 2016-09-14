@@ -30,8 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " EXPENSE_DATE, EXPENSE_PHOTO_URL TEXT, EXPENSE_AMOUNT DOUBLE ," +
                 " CLAIM_ID INTEGER , FOREIGN KEY(CLAIM_ID) REFERENCES tbl_expense_claims(ID))");
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_EXPENSE_CLAIMS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, CLAIM_TITLE TEXT, " +
-                "CLAIM_DESCRIPTION TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_EXPENSE_CLAIMS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, CLAIM_TITLE TEXT)");
     }
 
     @Override
@@ -61,6 +60,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 expenseItem.setClaimId(new Long(res.getInt(5)));
 
                 expenseItems.add(expenseItem);
+            }
+        }
+
+        if (!expenseItems.isEmpty()){
+            for (ExpenseItem item : expenseItems){
+
+                res = db.rawQuery("SELECT * FROM " + TABLE_EXPENSE_CLAIMS + " WHERE ID =?",
+                        new String[]{item.getClaimId() + ""});
+
+                if(res.getCount() > 0){
+                    while (res.moveToNext()){
+
+                        ExpenseClaim expenseClaim = new ExpenseClaim();
+                        expenseClaim.setId(new Long(res.getInt(0)));
+                        expenseClaim.setTitle(res.getString(1));
+
+                        item.setClaim(expenseClaim);
+                    }
+                }
+
             }
         }
 
@@ -126,8 +145,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //Insert
             ContentValues contentValues = new ContentValues();
             contentValues.put("CLAIM_TITLE", expenseClaim.getTitle());
-            contentValues.put("CLAIM_DESCRIPTION", expenseClaim.getDescription());
-
             Long result = db.insert(TABLE_EXPENSE_CLAIMS, null, contentValues);
 
             if (result == -1) {
@@ -141,8 +158,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //Update
             ContentValues contentValues = new ContentValues();
             contentValues.put("CLAIM_TITLE", expenseClaim.getTitle());
-            contentValues.put("CLAIM_DESCRIPTION", expenseClaim.getDescription());
-
             try {
                 int result = db.update(TABLE_EXPENSE_CLAIMS, contentValues, "ID='" + expenseClaim.getId() + "'", null);
 
@@ -166,7 +181,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             while (res.moveToNext()) {
                 expenseClaim.setId(new Long(res.getInt(0)));
                 expenseClaim.setTitle(res.getString(1));
-                expenseClaim.setDescription(res.getString(2));
             }
         }
 
@@ -260,7 +274,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ExpenseClaim expenseClaim = new ExpenseClaim();
                 expenseClaim.setId(new Long(res.getInt(0)));
                 expenseClaim.setTitle(res.getString(1));
-                expenseClaim.setDescription(res.getString(2));
 
                 Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_EXPENSES + " WHERE CLAIM_ID =?",
                         new String[]{expenseClaim.getId() + ""});
