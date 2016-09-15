@@ -49,16 +49,21 @@
 
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="20dp"
                 android:text="Open"
-                android:id="@+id/btnOpen"/>
+                android:textSize="10dp"
+                android:id="@+id/btnOpen"
+                android:layout_marginLeft="10dp"
+                android:background="@color/material_blue_grey_80"
+                android:textColor="@color/gray_btn_bg_color"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ksh 250"
                 android:id="@+id/txtClaimTotal"
-                android:textSize="13dp"/>
+                android:textSize="13dp"
+                android:layout_marginLeft="14dp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
