@@ -1,5 +1,7 @@
 package com.example.wladek.wira.pojo;
 
+import com.example.wladek.wira.utils.ExpenseCategory;
+
 import java.io.Serializable;
 
 
@@ -13,6 +15,7 @@ public class ExpenseItem implements Serializable {
     private Double expenseAmount;
     private String imagePath;
     private Long claimId;
+    private ExpenseCategory category;
     private ExpenseClaim claim;
 
 
@@ -93,5 +96,13 @@ public class ExpenseItem implements Serializable {
 
     public void setClaim(ExpenseClaim claim) {
         this.claim = claim;
+    }
+
+    public ExpenseCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ExpenseCategory category) {
+        this.category = category;
     }
 }

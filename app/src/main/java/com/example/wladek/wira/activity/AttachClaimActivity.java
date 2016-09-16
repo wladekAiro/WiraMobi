@@ -1,11 +1,13 @@
 package com.example.wladek.wira.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ public class AttachClaimActivity extends AppCompatActivity {
 
     ArrayList<ExpenseClaim> claims = new ArrayList<>();
     CustomListAdaptor customListAdaptor;
+    static final int CLAIM_RESULT_CODE = 145;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,19 @@ public class AttachClaimActivity extends AppCompatActivity {
         customListAdaptor = new CustomListAdaptor(AttachClaimActivity.this , claims);
 
         listViewAttachClaims.setAdapter(customListAdaptor);
+
+        listViewAttachClaims.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final ExpenseClaim expenseClaim = claims.get(position);
+
+                Intent intent = new Intent();
+                intent.putExtra("claimId" , expenseClaim.getId());
+                intent.putExtra("claimTitle" , expenseClaim.getTitle());
+                setResult(CLAIM_RESULT_CODE , intent);
+                finish();
+            }
+        });
     }
 
     private class CustomListAdaptor extends BaseAdapter {

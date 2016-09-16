@@ -28,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_EXPENSES + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, EXPENSE_NAME TEXT, " +
                 " EXPENSE_DATE, EXPENSE_PHOTO_URL TEXT, EXPENSE_AMOUNT DOUBLE ," +
-                " CLAIM_ID INTEGER , FOREIGN KEY(CLAIM_ID) REFERENCES tbl_expense_claims(ID))");
+                " CLAIM_ID INTEGER , EXPENSE_CATEGORY TEXT, FOREIGN KEY(CLAIM_ID) REFERENCES tbl_expense_claims(ID))");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_EXPENSE_CLAIMS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, CLAIM_TITLE TEXT)");
     }
@@ -58,6 +58,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 expenseItem.setImagePath(res.getString(3));
                 expenseItem.setExpenseAmount(res.getDouble(4));
                 expenseItem.setClaimId(new Long(res.getInt(5)));
+                expenseItem.setCategory(res.getString(6) == null ? null :
+                        ExpenseCategory.valueOf(res.getString(6)));
 
                 expenseItems.add(expenseItem);
             }
@@ -108,6 +110,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 contentValues.put("CLAIM_ID", expenseItem.getClaimId());
             }
 
+            if (expenseItem.getCategory() != null) {
+                contentValues.put("EXPENSE_CATEGORY", expenseItem.getCategory().toString());
+            }
+
             Long result = db.insert(TABLE_EXPENSES, null, contentValues);
 
             if (result == -1) {
@@ -123,8 +129,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put("EXPENSE_PHOTO_URL", expenseItem.getImagePath());
             contentValues.put("EXPENSE_AMOUNT", expenseItem.getExpenseAmount());
 
-            if (expenseItem.getClaimId() != null) {
+            if (expenseItem.getClaimId() != null && !expenseItem.getClaimId().equals(new Long(0))) {
                 contentValues.put("CLAIM_ID", expenseItem.getClaimId());
+            }
+            if (expenseItem.getCategory() != null) {
+                contentValues.put("EXPENSE_CATEGORY", expenseItem.getCategory().toString());
             }
 
             db.update(TABLE_EXPENSES, contentValues, "EXPENSE_PHOTO_URL='" + pic_url + "'", null);

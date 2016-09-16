@@ -55,6 +55,9 @@ public class ExpenseActivity extends AppCompatActivity {
 
     Typeface boldTf;
 
+    static final int CLAIM_RESULT_CODE = 145;
+    static final int CATEGORY_RESULT_CODE = 146;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +108,7 @@ public class ExpenseActivity extends AppCompatActivity {
                 try {
                     Intent intent = new Intent(ExpenseActivity.this, AttachClaimActivity.class);
                     intent.putExtra("expense", expenseItem);
-                    startActivity(intent);
+                    startActivityForResult(intent, 1);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -119,7 +122,7 @@ public class ExpenseActivity extends AppCompatActivity {
                 try {
                     Intent intent = new Intent(ExpenseActivity.this, AttachCategoryActivity.class);
                     intent.putExtra("expense", expenseItem);
-                    startActivity(intent);
+                    startActivityForResult(intent, 1);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -171,9 +174,6 @@ public class ExpenseActivity extends AppCompatActivity {
         expenseItem.setExpenseDate(txtExpenseDate.getText().toString());
 
         dbHelper.save(expenseItem);
-
-        Toast.makeText(this, "Updated Date : " +txtExpenseDate.getText().toString(),
-                Toast.LENGTH_SHORT).show();
         onBackPressed();
     }
 
@@ -186,6 +186,16 @@ public class ExpenseActivity extends AppCompatActivity {
 
             if (expenseItem.getExpenseDate() != null) {
                 txtExpenseDate.setText(expenseItem.getExpenseDate());
+            }
+
+            if (expenseItem.getClaim() != null){
+                editClaimTitle.setText(expenseItem.getClaim().getTitle());
+            }
+
+            if (expenseItem.getCategory() != null){
+                editCategory.setText(expenseItem.getCategory().name());
+            }else {
+                editCategory.setText(ExpenseCategory.Fuel.name());
             }
 
             mPicasso
@@ -201,5 +211,28 @@ public class ExpenseActivity extends AppCompatActivity {
         editTextExpenseName.setTypeface(boldTf);
         editTextExpenseAmount.setTypeface(boldTf);
         txtExpenseDate.setTypeface(boldTf);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == CLAIM_RESULT_CODE){
+            Long claimId = data.getLongExtra("claimId", 0);
+            String claimTitle = data.getStringExtra("claimTitle");
+            expenseItem.setClaimId(claimId);
+            editClaimTitle.setText(claimTitle);
+        }else if (resultCode == CATEGORY_RESULT_CODE){
+            //Logic for category
+
+            try{
+                String name = data.getStringExtra("claimCategory");
+                expenseItem.setCategory(ExpenseCategory.valueOf(name));
+                editCategory.setText(name);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
     }
 }
