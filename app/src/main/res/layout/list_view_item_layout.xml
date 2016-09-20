@@ -7,10 +7,10 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="#FFFFFFFF">
+        android:background="#BBFFFFFF">
 
         <ImageView
-            android:layout_width="70dp"
+            android:layout_width="55dp"
             android:layout_height="75dp"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"

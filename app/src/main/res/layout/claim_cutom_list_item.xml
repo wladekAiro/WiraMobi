@@ -2,19 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="1"
-    android:background="#FFFFFFFF">
+    android:weightSum="1">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#FFFFFFFF">
+        android:layout_height="78dp"
+        android:background="#BBFFFFFF">
 
         <ImageView
             android:layout_width="70dp"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:id="@+id/imgIconView"
             android:src="@mipmap/document_icon" />
 
@@ -22,7 +21,7 @@
             android:orientation="vertical"
             android:layout_width="152dp"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:weightSum="1">
 
             <TextView
@@ -38,7 +37,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="15dp">
 
             <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->
@@ -63,7 +62,8 @@
                 android:text="Ksh 250"
                 android:id="@+id/txtClaimTotal"
                 android:textSize="13dp"
-                android:layout_marginLeft="14dp" />
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="5dp"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
