@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    android:background="#471FDCB2">
+    android:background="@color/backgroundColor">
 
     <!--<TableRow-->
         <!--android:layout_width="match_parent"-->
@@ -20,6 +20,5 @@
         android:id="@+id/lstClaims"
         android:listSelector="@drawable/list_selector"
         android:fadingEdgeLength="50dp"
-        android:layout_weight="1"
-        android:layout_marginTop="62dp"/>
+        android:layout_weight="1"/>
 </LinearLayout>

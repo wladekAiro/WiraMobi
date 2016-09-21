@@ -5,11 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    android:background="#471FDCB2">
+    android:background="@color/backgroundColor">
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lstExpenses"
-        android:layout_marginTop="60dp"/>
+        android:id="@+id/lstExpenses"/>
 </LinearLayout>

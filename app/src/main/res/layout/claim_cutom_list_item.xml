@@ -8,7 +8,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="78dp"
-        android:background="#BBFFFFFF">
+        android:background="@color/white">
 
         <ImageView
             android:layout_width="70dp"
@@ -53,8 +53,8 @@
                 android:textSize="10dp"
                 android:id="@+id/btnOpen"
                 android:layout_marginLeft="10dp"
-                android:background="@color/material_blue_grey_80"
-                android:textColor="@color/gray_btn_bg_color"/>
+                android:background="@color/btnOpenColor"
+                android:textColor="@color/white"/>
 
             <TextView
                 android:layout_width="wrap_content"

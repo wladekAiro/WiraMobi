@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     DatabaseHelper myDb;
 
-//    ActionBar actionBar;
+    ActionBar actionBar;
     Toolbar toolbar;
 
     @Override
@@ -64,10 +65,12 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.setTitle("Expenses");
 
-//        actionBar = getSupportActionBar();
+        setSupportActionBar(toolbar);
+
+        actionBar = getSupportActionBar();
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
 
@@ -79,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.getTabAt(0).setIcon(R.mipmap.receipt_icon);
         tabLayout.getTabAt(1).setIcon(R.mipmap.report_icon);
-        tabLayout.getTabAt(2).setIcon(R.mipmap.contact_icon);
+        tabLayout.getTabAt(2).setIcon(R.mipmap.profile_new);
+
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
 
         fab = (AddFloatingActionButton) findViewById(R.id.fab);
 
@@ -112,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (tab.getPosition() == 1) {
                     toolbar.setTitle("Claims");
                     fab.setVisibility(View.VISIBLE);
-                    fab.setImageResource(R.mipmap.create_new_icon);
+//                    fab.setImageResource(R.mipmap.create_new_icon);
 
                     fab.setOnClickListener(new View.OnClickListener() {
                         @Override

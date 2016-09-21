@@ -5,14 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    android:background="#471FDCB2">
+    android:background="@color/backgroundColor">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="63dp"
-        android:background="#BBFFFFFF">
+        android:background="@color/white">
 
         <ImageView
             android:layout_marginTop="5dp"
