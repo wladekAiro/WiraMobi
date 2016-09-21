@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setIcon(R.mipmap.receipt_icon);
-        tabLayout.getTabAt(1).setIcon(R.mipmap.report_icon);
+        tabLayout.getTabAt(0).setIcon(R.mipmap.coins);
+        tabLayout.getTabAt(1).setIcon(R.mipmap.contact);
         tabLayout.getTabAt(2).setIcon(R.mipmap.profile_new);
 
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
