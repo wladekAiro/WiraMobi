@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.example.wladek.wira.activity.ClaimsActivity;
 import com.example.wladek.wira.fragments.tab_fragments.ClaimsFragment;
 import com.example.wladek.wira.fragments.tab_fragments.ExpenseFragment;
 import com.example.wladek.wira.fragments.tab_fragments.ProfileFragment;
@@ -76,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setIcon(R.mipmap.coins);
-        tabLayout.getTabAt(1).setIcon(R.mipmap.contact);
+        tabLayout.getTabAt(0).setIcon(R.mipmap.expense_active);
+        tabLayout.getTabAt(1).setIcon(R.mipmap.report_icon);
         tabLayout.getTabAt(2).setIcon(R.mipmap.contact);
 
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
@@ -100,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (tab.getPosition() == 0) {
                     toolbar.setTitle("Expenses");
+                    tab.setIcon(R.mipmap.expense_active);
                     fab.setVisibility(View.VISIBLE);
                     fab.setImageResource(android.R.drawable.ic_menu_camera);
 
@@ -112,8 +112,10 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (tab.getPosition() == 1) {
                     toolbar.setTitle("Claims");
+                    tab.setIcon(R.mipmap.report_active);
                 } else {
                     toolbar.setTitle("Profile");
+                    tab.setIcon(R.mipmap.contact_active);
                     fab.setVisibility(View.INVISIBLE);
                 }
             }
@@ -124,8 +126,10 @@ public class MainActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(tab.getPosition());
 
                 if (tab.getPosition() == 0) {
-
+                    toolbar.setTitle("Expenses");
+                    tab.setIcon(R.mipmap.expense_icon);
                     fab.setVisibility(View.VISIBLE);
+                    fab.setImageResource(android.R.drawable.ic_menu_camera);
 
                     fab.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -135,18 +139,11 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                 } else if (tab.getPosition() == 1) {
-                    fab.setVisibility(View.VISIBLE);
-
-                    fab.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-//                            Toast.makeText(getApplicationContext(), "Raise claim" , Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(getApplicationContext(), ClaimsActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-
+                    toolbar.setTitle("Claims");
+                    tab.setIcon(R.mipmap.report_icon);
                 } else {
+                    toolbar.setTitle("Profile");
+                    tab.setIcon(R.mipmap.contact);
                     fab.setVisibility(View.INVISIBLE);
                 }
             }
@@ -157,8 +154,10 @@ public class MainActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(tab.getPosition());
 
                 if (tab.getPosition() == 0) {
-
+                    toolbar.setTitle("Expenses");
+                    tab.setIcon(R.mipmap.expense_active);
                     fab.setVisibility(View.VISIBLE);
+                    fab.setImageResource(android.R.drawable.ic_menu_camera);
 
                     fab.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -168,23 +167,15 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                 } else if (tab.getPosition() == 1) {
-                    fab.setVisibility(View.VISIBLE);
-
-                    fab.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-//                            Toast.makeText(getApplicationContext(), "Raise claim" , Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(getApplicationContext(), ClaimsActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-
+                    toolbar.setTitle("Claims");
+                    tab.setIcon(R.mipmap.report_active);
                 } else {
+                    toolbar.setTitle("Profile");
+                    tab.setIcon(R.mipmap.contact_active);
                     fab.setVisibility(View.INVISIBLE);
                 }
             }
         });
-
     }
 
     public void showGalleryOptions() {
@@ -210,47 +201,6 @@ public class MainActivity extends AppCompatActivity {
         txtGallery.setOnClickListener(new CustomClickListener(this, "imgBtnGallery"));
         txtCamera.setOnClickListener(new CustomClickListener(this, "imgBtnCam"));
     }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        if(tabLayout.getSelectedTabPosition() == 1) {
-//            getMenuInflater().inflate(R.menu.menu_main, menu);
-//        }
-//
-//        if (tabLayout.getSelectedTabPosition() == 2){
-//        }
-//
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        int currentTab = tabLayout.getSelectedTabPosition();
-//
-//        if(currentTab == 1) {
-//            getMenuInflater().inflate(R.menu.menu_main, menu);
-//            return  true;
-//        }else {return false;}
-//
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_qrCode) {
-//            Intent intent = new Intent(MainActivity.this , BarCodeActivity.class);
-//            startActivityForResult(intent , QRCODE_REQUEST);
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     public void setUpViewPager(ViewPager viewPager) {
         //TO DO: write an adapter for this viewpager
