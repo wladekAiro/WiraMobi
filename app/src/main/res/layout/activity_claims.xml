@@ -23,18 +23,18 @@
 
     <include layout="@layout/content_claims" />
 
-    <com.getbase.floatingactionbutton.AddFloatingActionButton
-        android:id="@+id/fbAddExpense"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        app:fab_addButtonSize="normal"
-        app:fab_labelsPosition="right"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"/>
+    <!--<com.getbase.floatingactionbutton.AddFloatingActionButton-->
+        <!--android:id="@+id/fbAddExpense"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--app:fab_addButtonSize="normal"-->
+        <!--app:fab_labelsPosition="right"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_margin="@dimen/fab_margin"/>-->
 
         <!--<com.getbase.floatingactionbutton.AddFloatingActionButton-->
             <!--android:id="@+id/normal_plus"-->

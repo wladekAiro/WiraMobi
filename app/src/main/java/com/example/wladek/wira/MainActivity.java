@@ -10,15 +10,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.example.wladek.wira.activity.BarCodeActivity;
 import com.example.wladek.wira.activity.ClaimsActivity;
 import com.example.wladek.wira.fragments.tab_fragments.ClaimsFragment;
 import com.example.wladek.wira.fragments.tab_fragments.ExpenseFragment;
@@ -27,7 +24,6 @@ import com.example.wladek.wira.pager_adapters.ViewPagerAdapter;
 import com.example.wladek.wira.pojo.ExpenseItem;
 import com.example.wladek.wira.utils.DatabaseHelper;
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.kosalgeek.android.photoutil.CameraPhoto;
 import com.kosalgeek.android.photoutil.GalleryPhoto;
 
@@ -225,30 +221,47 @@ public class MainActivity extends AppCompatActivity {
         txtGallery.setOnClickListener(new CustomClickListener(this, "imgBtnGallery"));
         txtCamera.setOnClickListener(new CustomClickListener(this, "imgBtnCam"));
     }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        if(tabLayout.getSelectedTabPosition() == 1) {
+//            getMenuInflater().inflate(R.menu.menu_main, menu);
+//        }
+//
+//        if (tabLayout.getSelectedTabPosition() == 2){
+//        }
+//
+//        return true;
+//    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_qrCode) {
-            Intent intent = new Intent(MainActivity.this , BarCodeActivity.class);
-            startActivityForResult(intent , QRCODE_REQUEST);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        int currentTab = tabLayout.getSelectedTabPosition();
+//
+//        if(currentTab == 1) {
+//            getMenuInflater().inflate(R.menu.menu_main, menu);
+//            return  true;
+//        }else {return false;}
+//
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_qrCode) {
+//            Intent intent = new Intent(MainActivity.this , BarCodeActivity.class);
+//            startActivityForResult(intent , QRCODE_REQUEST);
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     public void setUpViewPager(ViewPager viewPager) {
         //TO DO: write an adapter for this viewpager
@@ -306,6 +319,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
         String photoPath = null;
 
         if (resultCode == Activity.RESULT_OK) {
@@ -319,17 +335,26 @@ public class MainActivity extends AppCompatActivity {
                 photoPath = galleryPhoto.getPath();
                 updateExpense(photoPath);
             }
-        }else if (resultCode == CommonStatusCodes.SUCCESS){
-            if (requestCode == QRCODE_REQUEST){
-                if (data != null){
-                    String barcode = data.getStringExtra("qrCode");
-                    Toast.makeText(MainActivity.this , "Data : "+barcode , Toast.LENGTH_LONG).show();
-                }else {
-                    Toast.makeText(MainActivity.this , "No data received from scanner" , Toast.LENGTH_LONG).show();
-                }
-            }
         }
+
+//        else if (resultCode == CommonStatusCodes.SUCCESS){
+//            if (requestCode == QRCODE_REQUEST){
+//
+////                Bundle args = new Bundle();
+////                args.putString("This is an expense argument" , "Claims");
+////
+////                Fragment fragment = getSupportFragmentManager().getFragment(args, "Claims");
+////                fragment.onActivityResult(requestCode,resultCode,data);
+////                if (data != null){
+////                    String barcode = data.getStringExtra("qrCode");
+////                    Toast.makeText(MainActivity.this , "Data : "+barcode , Toast.LENGTH_LONG).show();
+////                }else {
+////                    Toast.makeText(MainActivity.this , "No data received from scanner" , Toast.LENGTH_LONG).show();
+////                }
+//            }
+//        }
     }
+
 
     public void updateExpense(String imageSrc) {
 

@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,12 +16,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wladek.wira.R;
+import com.example.wladek.wira.activity.BarCodeActivity;
 import com.example.wladek.wira.activity.ViewClaimActivity;
 import com.example.wladek.wira.pojo.ExpenseClaim;
 import com.example.wladek.wira.pojo.ExpenseItem;
 import com.example.wladek.wira.utils.DatabaseHelper;
+import com.google.android.gms.common.api.CommonStatusCodes;
 
 import java.util.ArrayList;
 
@@ -28,7 +34,8 @@ import java.util.ArrayList;
 public class ClaimsFragment extends Fragment {
 
     private static final String ARG_EXAMPLE = "This is an expense argument";
-    public ClaimsFragment(){
+
+    public ClaimsFragment() {
 
     }
 
@@ -40,12 +47,13 @@ public class ClaimsFragment extends Fragment {
     ListView lstClaims;
 
     CustomListAdaptor customListAdaptor;
+    final int QRCODE_REQUEST = 567;
 
-    public static ClaimsFragment newInstance(String expenseArgument){
+    public static ClaimsFragment newInstance(String expenseArgument) {
 
         ClaimsFragment expenseFragment = new ClaimsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_EXAMPLE , expenseArgument);
+        args.putString(ARG_EXAMPLE, expenseArgument);
 
         return expenseFragment;
     }
@@ -53,21 +61,37 @@ public class ClaimsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
         dbHelper = new DatabaseHelper(getActivity());
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.claims_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_qrCode) {
+            Intent intent = new Intent(getActivity(), BarCodeActivity.class);
+            startActivityForResult(intent, QRCODE_REQUEST);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.claims_layout , container , false);
+        myView = inflater.inflate(R.layout.claims_layout, container, false);
 
         lstClaims = (ListView) myView.findViewById(R.id.lstClaims);
 
         loadClaims();
 
-        customListAdaptor = new CustomListAdaptor(this.getActivity() , claims);
+        customListAdaptor = new CustomListAdaptor(this.getActivity(), claims);
         lstClaims.setAdapter(customListAdaptor);
 
         updateFragmentListView();
@@ -75,7 +99,7 @@ public class ClaimsFragment extends Fragment {
         return myView;
     }
 
-    private class CustomListAdaptor extends BaseAdapter{
+    private class CustomListAdaptor extends BaseAdapter {
 
         private LayoutInflater layoutInflater;
 
@@ -108,9 +132,9 @@ public class ClaimsFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             final ExpenseClaim expenseClaim = expenseClaims.get(position);
 
-            if (convertView == null){
+            if (convertView == null) {
 
-                convertView = layoutInflater.inflate(R.layout.claim_cutom_list_item , null);
+                convertView = layoutInflater.inflate(R.layout.claim_cutom_list_item, null);
 
                 viewHolder = new ViewHolder();
 
@@ -121,7 +145,7 @@ public class ClaimsFragment extends Fragment {
 
                 convertView.setTag(viewHolder);
 
-            }else {
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
@@ -161,7 +185,7 @@ public class ClaimsFragment extends Fragment {
         }
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
         TextView claimTitle;
         TextView txtClaimTotal;
         ImageView iconView;
@@ -181,7 +205,7 @@ public class ClaimsFragment extends Fragment {
         }
     }
 
-    public void openClaim(ExpenseClaim expenseClaim){
+    public void openClaim(ExpenseClaim expenseClaim) {
         Intent intent = new Intent(getActivity(), ViewClaimActivity.class);
         intent.putExtra("claim", expenseClaim);
         startActivity(intent);
@@ -196,5 +220,20 @@ public class ClaimsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateFragmentListView();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == CommonStatusCodes.SUCCESS) {
+            if (requestCode == QRCODE_REQUEST) {
+                if (data != null) {
+                    String barcode = data.getStringExtra("qrCode");
+                    Toast.makeText(getActivity(), "Data : " + barcode, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity(), "No data received from scanner", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 }

@@ -16,7 +16,6 @@ import com.example.wladek.wira.R;
 import com.example.wladek.wira.pojo.ExpenseClaim;
 import com.example.wladek.wira.pojo.ExpenseItem;
 import com.example.wladek.wira.utils.DatabaseHelper;
-import com.getbase.floatingactionbutton.AddFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +34,7 @@ public class ClaimsActivity extends AppCompatActivity {
     MaterialDialog.Builder builder;
     MaterialDialog dialog;
 
-    AddFloatingActionButton fabAttachExpense;
+//    AddFloatingActionButton fabAttachExpense;
 
     ArrayList<ExpenseItem> expenseItems = new ArrayList<>();
     Set<ExpenseItem> claimExpenses = new HashSet<>();
@@ -58,13 +57,13 @@ public class ClaimsActivity extends AppCompatActivity {
         actionBar.setTitle("New Claim");
 
         editTextClaimTitle = (EditText) findViewById(R.id.editTextClaimTitle);
-        fabAttachExpense = (AddFloatingActionButton) findViewById(R.id.fbAddExpense);
-        fabAttachExpense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                callDialog();
-            }
-        });
+//        fabAttachExpense = (AddFloatingActionButton) findViewById(R.id.fbAddExpense);
+//        fabAttachExpense.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                callDialog();
+//            }
+//        });
     }
 
     @Override
