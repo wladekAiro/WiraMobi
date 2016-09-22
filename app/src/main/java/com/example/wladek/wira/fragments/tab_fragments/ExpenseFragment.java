@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wladek.wira.MainActivity;
 import com.example.wladek.wira.R;
 import com.example.wladek.wira.activity.ExpenseActivity;
 import com.example.wladek.wira.pojo.ExpenseItem;
@@ -95,7 +96,8 @@ public class ExpenseFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_new) {
-            //TO DO: logic here
+            MainActivity activity = (MainActivity)getActivity();
+            activity.showGalleryOptions();
             return true;
         }
 
@@ -106,8 +108,6 @@ public class ExpenseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.expense_layout, container, false);
-
-//        myDb = new DatabaseHelper(getActivity());
 
         listView = (ListView) myView.findViewById(R.id.lstExpenses);
 

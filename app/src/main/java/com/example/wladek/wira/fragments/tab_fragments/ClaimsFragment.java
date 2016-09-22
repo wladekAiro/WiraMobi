@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.wladek.wira.R;
 import com.example.wladek.wira.activity.BarCodeActivity;
+import com.example.wladek.wira.activity.ClaimsActivity;
 import com.example.wladek.wira.activity.ViewClaimActivity;
 import com.example.wladek.wira.pojo.ExpenseClaim;
 import com.example.wladek.wira.pojo.ExpenseItem;
@@ -78,6 +79,11 @@ public class ClaimsFragment extends Fragment {
             Intent intent = new Intent(getActivity(), BarCodeActivity.class);
             startActivityForResult(intent, QRCODE_REQUEST);
             return true;
+        }
+
+        if (item.getItemId() == R.id.action_new){
+            Intent intent = new Intent(getActivity(), ClaimsActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

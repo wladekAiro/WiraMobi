@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.getTabAt(0).setIcon(R.mipmap.coins);
         tabLayout.getTabAt(1).setIcon(R.mipmap.contact);
-        tabLayout.getTabAt(2).setIcon(R.mipmap.profile_new);
+        tabLayout.getTabAt(2).setIcon(R.mipmap.contact);
 
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
 
@@ -112,17 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (tab.getPosition() == 1) {
                     toolbar.setTitle("Claims");
-                    fab.setVisibility(View.VISIBLE);
-//                    fab.setImageResource(R.mipmap.create_new_icon);
-
-                    fab.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getApplicationContext(), ClaimsActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-
                 } else {
                     toolbar.setTitle("Profile");
                     fab.setVisibility(View.INVISIBLE);
@@ -198,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void showGalleryOptions() {
+    public void showGalleryOptions() {
         boolean wrapInScrollView = true;
 
         builder = new MaterialDialog.Builder(this);
