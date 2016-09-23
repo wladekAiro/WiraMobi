@@ -58,8 +58,9 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".activity.AttachExpenseActivity"
-            android:launchMode="singleTask"
-            android:noHistory="false"
+            android:clearTaskOnLaunch="true"
+            android:excludeFromRecents="true"
+            android:autoRemoveFromRecents="true"
             android:parentActivityName=".activity.ViewClaimActivity" />
         <activity
             android:name=".activity.BarCodeActivity"

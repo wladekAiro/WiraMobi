@@ -2,7 +2,6 @@ package com.example.wladek.wira.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -34,6 +33,7 @@ public class AttachExpenseActivity extends AppCompatActivity {
     ActionBar actionBar;
 
     ArrayList<ExpenseItem> expenses = new ArrayList<>();
+    ArrayList<ExpenseItem> checkedItems = new ArrayList<>();
 
     ListView lstExpenses;
 
@@ -45,12 +45,11 @@ public class AttachExpenseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_attach_expense);
 
         databaseHelper = new DatabaseHelper(this);
-        loadExpenses();
-
         actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
 
         expenseClaim = (ExpenseClaim) getIntent().getSerializableExtra("claim");
+        loadExpenses();
 
         if (expenseClaim != null) {
             actionBar.setTitle(expenseClaim.getTitle());
@@ -60,7 +59,7 @@ public class AttachExpenseActivity extends AppCompatActivity {
         lstExpenses = (ListView) findViewById(R.id.expensesListView);
 
         if (customAdaptor == null) {
-            customAdaptor = new CustomAdaptor(this, expenses);
+            customAdaptor = new CustomAdaptor(this, expenses, checkedItems);
         } else {
             loadExpenses();
             customAdaptor.notifyDataSetChanged();
@@ -91,14 +90,17 @@ public class AttachExpenseActivity extends AppCompatActivity {
 
         private Context context;
         private ArrayList<ExpenseItem> items = new ArrayList<>();
+        private ArrayList<ExpenseItem> checked = new ArrayList<>();
         ViewHolder viewHolder;
         LayoutInflater layoutInflater;
         Picasso mPicasso;
 
-        public CustomAdaptor(Context context, ArrayList<ExpenseItem> expenseItems) {
+        public CustomAdaptor(Context context, ArrayList<ExpenseItem> expenseItems,
+                             ArrayList<ExpenseItem> checked) {
             layoutInflater = LayoutInflater.from(context);
             this.context = context;
             this.items = expenseItems;
+            this.checked = checked;
             this.mPicasso = Picasso.with(context);
         }
 
@@ -147,10 +149,8 @@ public class AttachExpenseActivity extends AppCompatActivity {
                         .into(viewHolder.imgExpensePic);
             }
 
-            if (expenseItem.getClaimId() != null) {
-                if (expenseClaim.getId().equals(expenseItem.getClaimId())) {
-                    viewHolder.checkBoxAttach.setChecked(true);
-                }
+            if (!checked.isEmpty() && checked.contains(expenseItem)) {
+                viewHolder.checkBoxAttach.setChecked(true);
             }
 
             viewHolder.txtExpenseTitle.setText(expenseItem.getExpenseName());
@@ -193,19 +193,27 @@ public class AttachExpenseActivity extends AppCompatActivity {
     private void loadExpenses() {
         expenses.clear();
         expenses.addAll(databaseHelper.getExpenseItems());
+        checkedItems.clear();
+        checkedItems.addAll(databaseHelper.getClaimExpenses(expenseClaim));
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         loadExpenses();
-        customAdaptor.notifyDataSetChanged();
+        if (customAdaptor != null) {
+            customAdaptor.notifyDataSetChanged();
+        }
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onRestoreInstanceState(savedInstanceState, persistentState);
+    protected void onStop() {
+        super.onStop();
         loadExpenses();
-        customAdaptor.notifyDataSetChanged();
+        if (customAdaptor != null) {
+            customAdaptor.notifyDataSetChanged();
+        }
+
+        finish();
     }
 }

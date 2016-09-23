@@ -87,7 +87,7 @@ public class ExpenseItem implements Serializable {
             return true;
         }
 
-        return false;
+        return id.equals(i.getId());
     }
 
     public ExpenseClaim getClaim() {

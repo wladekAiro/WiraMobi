@@ -168,7 +168,7 @@ public class ViewClaimActivity extends AppCompatActivity {
                         .load(new File(expenseItem.getImagePath()))
                         .placeholder(R.mipmap.document_icon)
                         .error(R.mipmap.document_icon)
-                        .resize(150, 100)
+                        .resize(450, 400)
                         .into(viewHolder.imgExpensePic);
             }
 

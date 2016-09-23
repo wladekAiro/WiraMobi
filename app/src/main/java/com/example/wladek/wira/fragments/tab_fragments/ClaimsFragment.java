@@ -155,20 +155,6 @@ public class ClaimsFragment extends Fragment {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            viewHolder.iconView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openClaim(expenseClaim);
-                }
-            });
-
-            viewHolder.btnOpen.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openClaim(expenseClaim);
-                }
-            });
-
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
