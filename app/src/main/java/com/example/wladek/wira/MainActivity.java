@@ -3,8 +3,11 @@ package com.example.wladek.wira;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -13,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.wladek.wira.fragments.tab_fragments.ClaimsFragment;
@@ -23,11 +25,13 @@ import com.example.wladek.wira.pager_adapters.ViewPagerAdapter;
 import com.example.wladek.wira.pojo.ExpenseItem;
 import com.example.wladek.wira.utils.DatabaseHelper;
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
-import com.kosalgeek.android.photoutil.CameraPhoto;
 import com.kosalgeek.android.photoutil.GalleryPhoto;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     final int GALLERY_REQUEST = 3233;
     final int QRCODE_REQUEST = 567;
 
-    CameraPhoto cameraPhoto;
     GalleryPhoto galleryPhoto;
 
     ArrayList<ExpenseItem> expenseExpenseItems = new ArrayList<>();
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     ActionBar actionBar;
     Toolbar toolbar;
+    private String photoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,19 +245,57 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void launchCamera(Context context) {
-        cameraPhoto = new CameraPhoto(context);
-        try {
-            startActivityForResult(cameraPhoto.takePhotoIntent(), CAMERA_REQUEST);
-            cameraPhoto.addToGallery();
-        } catch (IOException e) {
-            Toast.makeText(context, "Something went wrong while taking a photo",
-                    Toast.LENGTH_LONG).show();
+        Intent in = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (in.resolveActivity(context.getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+
+//                Uri photoURI = FileProvider.getUriForFile(this,
+//                        "com.example.wladek.wira",
+//                        photoFile);
+
+                in.putExtra("output", Uri.fromFile(photoFile));
+            }
         }
+
+        startActivityForResult(in, CAMERA_REQUEST);
+        addToGallery();
     }
 
-    public void launchGallery(Context context){
+    //Create file
+    private File createImageFile() {
+
+        String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = null;
+        try {
+            image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        photoPath = image.getAbsolutePath();
+
+        return image;
+    }
+
+    public void addToGallery() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(this.photoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
+    public void launchGallery(Context context) {
         galleryPhoto = new GalleryPhoto(context);
-        startActivityForResult(galleryPhoto.openGalleryIntent() , GALLERY_REQUEST);
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);//
+//        startActivityForResult(Intent.createChooser(intent, "Select File"), GALLERY_REQUEST);
+        startActivityForResult(galleryPhoto.openGalleryIntent(), GALLERY_REQUEST);
     }
 
     @Override
@@ -261,37 +303,20 @@ public class MainActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        String photoPath = null;
-
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA_REQUEST) {
-                photoPath = cameraPhoto.getPhotoPath();
-                updateExpense(photoPath);
+                if (photoPath != null) {
+                    updateExpense(photoPath);
+                }
 
-            }else if (requestCode == GALLERY_REQUEST){
+            } else if (requestCode == GALLERY_REQUEST) {
                 Uri uri = data.getData();
                 galleryPhoto.setPhotoUri(uri);
+//                photoPath = getPhotoPathFromGallery(uri);
                 photoPath = galleryPhoto.getPath();
                 updateExpense(photoPath);
             }
         }
-
-//        else if (resultCode == CommonStatusCodes.SUCCESS){
-//            if (requestCode == QRCODE_REQUEST){
-//
-////                Bundle args = new Bundle();
-////                args.putString("This is an expense argument" , "Claims");
-////
-////                Fragment fragment = getSupportFragmentManager().getFragment(args, "Claims");
-////                fragment.onActivityResult(requestCode,resultCode,data);
-////                if (data != null){
-////                    String barcode = data.getStringExtra("qrCode");
-////                    Toast.makeText(MainActivity.this , "Data : "+barcode , Toast.LENGTH_LONG).show();
-////                }else {
-////                    Toast.makeText(MainActivity.this , "No data received from scanner" , Toast.LENGTH_LONG).show();
-////                }
-//            }
-//        }
     }
 
 
@@ -308,6 +333,19 @@ public class MainActivity extends AppCompatActivity {
             expenseFragment.updateFragment1ListView();
         }
 
+    }
+
+    public String getPhotoPathFromGallery(Uri uri){
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver()
+                .query(uri, filePathColumn, null, null,
+                        null);
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
+
+        return picturePath;
     }
 
 }
