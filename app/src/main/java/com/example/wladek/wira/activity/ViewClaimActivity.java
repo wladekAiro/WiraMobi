@@ -166,8 +166,8 @@ public class ViewClaimActivity extends AppCompatActivity {
 
                 mPicasso
                         .load(new File(expenseItem.getImagePath()))
-                        .placeholder(R.mipmap.document_icon)
-                        .error(R.mipmap.document_icon)
+                        .placeholder(R.mipmap.report_icon)
+                        .error(R.mipmap.report_icon)
                         .resize(450, 400)
                         .into(viewHolder.imgExpensePic);
             }

@@ -123,7 +123,7 @@ public class AttachExpenseActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             final ExpenseItem expenseItem = items.get(position);
 
-            if (convertView == null) {
+//            if (convertView == null) {
                 viewHolder = new ViewHolder();
 
                 convertView = layoutInflater.inflate(R.layout.claim_lst_expenses_to_attach_custom_item, null);
@@ -135,16 +135,16 @@ public class AttachExpenseActivity extends AppCompatActivity {
 
                 convertView.setTag(viewHolder);
 
-            } else {
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
+//            } else {
+//                viewHolder = (ViewHolder) convertView.getTag();
+//            }
 
             if (expenseItem.getImagePath() != null) {
 
                 mPicasso
                         .load(new File(expenseItem.getImagePath()))
-                        .placeholder(R.mipmap.document_icon)
-                        .error(R.mipmap.document_icon)
+                        .placeholder(R.mipmap.report_icon)
+                        .error(R.mipmap.report_icon)
                         .resize(150, 100)
                         .into(viewHolder.imgExpensePic);
             }

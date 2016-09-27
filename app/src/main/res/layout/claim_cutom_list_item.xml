@@ -15,7 +15,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="15dp"
             android:id="@+id/imgIconView"
-            android:src="@mipmap/document_icon" />
+            android:src="@mipmap/report_icon" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -53,7 +53,7 @@
                 android:textSize="10dp"
                 android:id="@+id/btnOpen"
                 android:layout_marginLeft="10dp"
-                android:background="@color/btnOpenColor"
+                android:background="@drawable/button_border"
                 android:textColor="@color/white"/>
 
             <TextView

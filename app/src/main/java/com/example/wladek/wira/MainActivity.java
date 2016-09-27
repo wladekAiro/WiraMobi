@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setIcon(R.mipmap.expense_active);
-        tabLayout.getTabAt(1).setIcon(R.mipmap.report_icon);
-        tabLayout.getTabAt(2).setIcon(R.mipmap.contact);
+        tabLayout.getTabAt(1).setIcon(R.mipmap.report_inactive_icon);
+        tabLayout.getTabAt(2).setIcon(R.mipmap.contact_inactive);
 
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
 
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (tab.getPosition() == 0) {
                     toolbar.setTitle("Expenses");
-                    tab.setIcon(R.mipmap.expense_icon);
+                    tab.setIcon(R.mipmap.expense_inactive);
                     fab.setVisibility(View.VISIBLE);
                     fab.setImageResource(android.R.drawable.ic_menu_camera);
 
@@ -140,10 +140,10 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (tab.getPosition() == 1) {
                     toolbar.setTitle("Claims");
-                    tab.setIcon(R.mipmap.report_icon);
+                    tab.setIcon(R.mipmap.report_inactive_icon);
                 } else {
                     toolbar.setTitle("Profile");
-                    tab.setIcon(R.mipmap.contact);
+                    tab.setIcon(R.mipmap.contact_inactive);
                     fab.setVisibility(View.INVISIBLE);
                 }
             }
