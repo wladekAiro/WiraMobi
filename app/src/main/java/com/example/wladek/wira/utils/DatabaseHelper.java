@@ -19,6 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "WECMS.db";
     public static final String TABLE_EXPENSES = "tbl_expenses";
     public static final String TABLE_EXPENSE_CLAIMS = "tbl_expense_claims";
+    public static final String TABLE_USER = "tbl_user";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -31,12 +32,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " CLAIM_ID INTEGER , EXPENSE_CATEGORY TEXT, FOREIGN KEY(CLAIM_ID) REFERENCES tbl_expense_claims(ID))");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_EXPENSE_CLAIMS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, CLAIM_TITLE TEXT)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_USER + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "FIRST_NAME TEXT, SECOND_NAME TEXT, USER_SSID TEXT)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSE_CLAIMS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         onCreate(db);
     }
 

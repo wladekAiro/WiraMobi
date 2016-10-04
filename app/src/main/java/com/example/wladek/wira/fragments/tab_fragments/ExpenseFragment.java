@@ -8,9 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.wladek.wira.MainActivity;
 import com.example.wladek.wira.R;
 import com.example.wladek.wira.activity.ExpenseActivity;
 import com.example.wladek.wira.pojo.ExpenseItem;
@@ -81,27 +77,6 @@ public class ExpenseFragment extends Fragment {
         setHasOptionsMenu(true);
         helper = new DatabaseHelper(getActivity());
         loadExpenses();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_main, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_new) {
-            MainActivity activity = (MainActivity)getActivity();
-            activity.showGalleryOptions();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Nullable

@@ -16,16 +16,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.wladek.wira.R;
-import com.example.wladek.wira.activity.BarCodeActivity;
 import com.example.wladek.wira.activity.ClaimsActivity;
 import com.example.wladek.wira.activity.ViewClaimActivity;
 import com.example.wladek.wira.pojo.ExpenseClaim;
 import com.example.wladek.wira.pojo.ExpenseItem;
 import com.example.wladek.wira.utils.DatabaseHelper;
-import com.google.android.gms.common.api.CommonStatusCodes;
 
 import java.util.ArrayList;
 
@@ -48,7 +45,6 @@ public class ClaimsFragment extends Fragment {
     ListView lstClaims;
 
     CustomListAdaptor customListAdaptor;
-    final int QRCODE_REQUEST = 567;
 
     public static ClaimsFragment newInstance(String expenseArgument) {
 
@@ -75,12 +71,6 @@ public class ClaimsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_qrCode) {
-            Intent intent = new Intent(getActivity(), BarCodeActivity.class);
-            startActivityForResult(intent, QRCODE_REQUEST);
-            return true;
-        }
-
         if (item.getItemId() == R.id.action_new){
             Intent intent = new Intent(getActivity(), ClaimsActivity.class);
             startActivity(intent);
@@ -212,20 +202,5 @@ public class ClaimsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateFragmentListView();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (resultCode == CommonStatusCodes.SUCCESS) {
-            if (requestCode == QRCODE_REQUEST) {
-                if (data != null) {
-                    String barcode = data.getStringExtra("qrCode");
-                    Toast.makeText(getActivity(), "Data : " + barcode, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getActivity(), "No data received from scanner", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
     }
 }
